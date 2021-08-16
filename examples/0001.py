@@ -1,3 +1,4 @@
+#author: froginafog (Liang D.S.)
 import matplotlib.pyplot as plt
 
 def matrix_transpose(A):
