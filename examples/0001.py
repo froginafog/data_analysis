@@ -61,12 +61,6 @@ def calculate_mean(data):
         total = total + n
     return total/len(data)
 
-def calculate_mean(data):
-    total = 0
-    for n in data:
-        total = total + n
-    return total/len(data)
-
 def calculate_slope_of_regression_line(x_data, y_data):
     mean_x_data = calculate_mean(x_data)
     mean_y_data = calculate_mean(y_data)
