@@ -205,7 +205,7 @@ for n in unique_num_hours_studies:
     frequencies_num_hours_studies_predicted.append(calculate_predicted_y(n, b_0, b_1))
 
 R = calculate_correlation_coefficient(frequencies_num_hours_studies, frequencies_num_hours_studies_predicted) #correlation coefficient
-print("R:", R)
+print("correlation coefficient R:", R)
 
 x_min = 0
 x_max = 10
