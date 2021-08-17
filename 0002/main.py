@@ -87,7 +87,7 @@ def calculate_mode(a):
     return a[index_highest_frequency]
 
 def calculate_standard_deviation(a):
-    N = len(a)  #size of the population
+    N = len(a)  #size of the sample
     total = 0
     for n in a:
         total = total + n
