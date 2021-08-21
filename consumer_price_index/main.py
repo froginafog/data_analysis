@@ -1,4 +1,3 @@
-#author: froginafog (Liang D.S.)
 import matplotlib.pyplot as plt
 from numpy.polynomial import Polynomial
 from numpy.polynomial import Chebyshev
@@ -47,6 +46,20 @@ def push_back_column(a, A):
     else:
         for i in range(0, num_rows):
             A[i].append(a[i])
+
+def derivative_of_data_points(x_data, y_data):
+    num_x_data_points = len(x_data)
+    num_y_data_points = len(y_data)
+    if(num_x_data_points != num_y_data_points):
+        print("Error: the number of x_data points is not equal to the number of y_data points.")
+    else:
+        derivative_of_y_data = []
+        for i in range(0, num_x_data_points - 1):
+            dx = x_data[i + 1] - x_data[i]
+            dy = y_data[i + 1] - y_data[i]
+            derivative_of_y_data.append(dy/dx)       
+        x_data_for_derivative_of_y_data = x_data[0:(num_x_data_points - 1)].copy()
+        return x_data_for_derivative_of_y_data, derivative_of_y_data
 
 def calculate_mean(data):
     total = 0
@@ -323,41 +336,31 @@ for i in range(0, num_points):
 #------------------------------------------------------------
 #create the data points for the first derivative of the monthly CPI
 
-first_derivative_of_monthly_CPI = []
-num_points = len(time_line)
+x_data_for_first_derivative_of_monthly_CPI = []
+y_data_for_first_derivative_of_monthly_CPI = []
 
-for i in range(0, num_points - 1):
-    dx = time_line[i + 1] - time_line[i]
-    dy = monthly_CPI[i + 1] - monthly_CPI[i]
-    first_derivative_of_monthly_CPI.append(dy/dx)
-
-first_derivative_of_monthly_CPI.append(dy/dx)
+x_data_for_first_derivative_of_monthly_CPI, y_data_for_first_derivative_of_monthly_CPI = derivative_of_data_points(time_line, monthly_CPI)
 
 #------------------------------------------------------------
 #create the data points for the second derivative of the monthly CPI
 
-second_derivative_of_monthly_CPI = []
-num_points = len(time_line)
+x_data_for_second_derivative_of_monthly_CPI = []
+y_data_for_second_derivative_of_monthly_CPI = []
 
-for i in range(0, num_points - 1):
-    dx = time_line[i + 1] - time_line[i]
-    dy = first_derivative_of_monthly_CPI[i + 1] - first_derivative_of_monthly_CPI[i]
-    second_derivative_of_monthly_CPI.append(dy/dx)
-
-second_derivative_of_monthly_CPI.append(dy/dx)
+x_data_for_second_derivative_of_monthly_CPI, y_data_for_second_derivative_of_monthly_CPI = derivative_of_data_points(x_data_for_first_derivative_of_monthly_CPI, y_data_for_first_derivative_of_monthly_CPI)
 
 #------------------------------------------------------------
 #the regression line of the first derivative of the monthly CPI
 
-b_1_of_first_derivative_of_monthly_CPI = calculate_slope_of_regression_line(time_line, first_derivative_of_monthly_CPI)    #slope of regression line
-b_0_of_first_derivative_of_monthly_CPI = calculate_mean(first_derivative_of_monthly_CPI) - b_1_of_first_derivative_of_monthly_CPI * calculate_mean(time_line) #intercept of regression line
+b_1_of_first_derivative_of_monthly_CPI = calculate_slope_of_regression_line(x_data_for_first_derivative_of_monthly_CPI, y_data_for_first_derivative_of_monthly_CPI)    #slope of regression line
+b_0_of_first_derivative_of_monthly_CPI = calculate_mean(y_data_for_first_derivative_of_monthly_CPI) - b_1_of_first_derivative_of_monthly_CPI * calculate_mean(x_data_for_first_derivative_of_monthly_CPI) #intercept of regression line
 
-first_derivative_of_monthly_CPI_predicted = []
+y_data_first_derivative_of_monthly_CPI_predicted = []
 
-for n in time_line:
-    first_derivative_of_monthly_CPI_predicted.append(calculate_predicted_y(n, b_0_of_first_derivative_of_monthly_CPI, b_1_of_first_derivative_of_monthly_CPI))
+for n in x_data_for_first_derivative_of_monthly_CPI:
+    y_data_first_derivative_of_monthly_CPI_predicted.append(calculate_predicted_y(n, b_0_of_first_derivative_of_monthly_CPI, b_1_of_first_derivative_of_monthly_CPI))
 
-R_of_first_derivative_of_monthly_CPI  = calculate_correlation_coefficient(first_derivative_of_monthly_CPI, first_derivative_of_monthly_CPI_predicted) #correlation coefficient
+R_of_first_derivative_of_monthly_CPI  = calculate_correlation_coefficient(x_data_for_first_derivative_of_monthly_CPI, y_data_first_derivative_of_monthly_CPI_predicted) #correlation coefficient
 print("R_of_first_derivative_of_monthly_CPI:", R_of_first_derivative_of_monthly_CPI)
 
 x_min_of_first_derivative_of_monthly_CPI = time_line[0]
@@ -373,15 +376,15 @@ while(x <= x_max_of_first_derivative_of_monthly_CPI):
 #------------------------------------------------------------
 #the regression line of the second derivative of the monthly CPI
 
-b_1_of_second_derivative_of_monthly_CPI = calculate_slope_of_regression_line(time_line, second_derivative_of_monthly_CPI)    #slope of regression line
-b_0_of_second_derivative_of_monthly_CPI = calculate_mean(second_derivative_of_monthly_CPI) - b_1_of_second_derivative_of_monthly_CPI * calculate_mean(time_line) #intercept of regression line
+b_1_of_second_derivative_of_monthly_CPI = calculate_slope_of_regression_line(x_data_for_second_derivative_of_monthly_CPI, y_data_for_second_derivative_of_monthly_CPI)    #slope of regression line
+b_0_of_second_derivative_of_monthly_CPI = calculate_mean(y_data_for_second_derivative_of_monthly_CPI) - b_1_of_second_derivative_of_monthly_CPI * calculate_mean(x_data_for_second_derivative_of_monthly_CPI) #intercept of regression line
 
-second_derivative_of_monthly_CPI_predicted = []
+y_data_for_second_derivative_of_monthly_CPI_predicted = []
 
-for n in time_line:
-    second_derivative_of_monthly_CPI_predicted.append(calculate_predicted_y(n, b_0_of_second_derivative_of_monthly_CPI, b_1_of_second_derivative_of_monthly_CPI))
+for n in x_data_for_second_derivative_of_monthly_CPI:
+    y_data_for_second_derivative_of_monthly_CPI_predicted.append(calculate_predicted_y(n, b_0_of_second_derivative_of_monthly_CPI, b_1_of_second_derivative_of_monthly_CPI))
 
-R_of_second_derivative_of_monthly_CPI  = calculate_correlation_coefficient(second_derivative_of_monthly_CPI, second_derivative_of_monthly_CPI_predicted) #correlation coefficient
+R_of_second_derivative_of_monthly_CPI  = calculate_correlation_coefficient(y_data_for_second_derivative_of_monthly_CPI, y_data_for_second_derivative_of_monthly_CPI_predicted) #correlation coefficient
 print("R_of_second_derivative_of_monthly_CPI:", R_of_second_derivative_of_monthly_CPI)
 
 x_min_of_second_derivative_of_monthly_CPI = time_line[0]
@@ -413,7 +416,7 @@ plt.grid()
 #------------------------------------------------------------
 
 plt.subplot(3, 1, 2)
-plt.scatter(time_line, first_derivative_of_monthly_CPI, color = "blue", label = "first derivative of monthly CPI")
+plt.scatter(x_data_for_first_derivative_of_monthly_CPI, y_data_for_first_derivative_of_monthly_CPI, color = "blue", label = "first derivative of monthly CPI")
 plt.plot(x_data_regression_line_of_first_derivative_of_monthly_CPI, y_data_regression_line_of_first_derivative_of_monthly_CPI, color = "lightblue", label = "regression line for the first derivative of monthly CPI")
 plt.legend(loc = "lower right")
 plt.xticks(years)
@@ -425,7 +428,7 @@ plt.grid()
 #------------------------------------------------------------
 
 plt.subplot(3, 1, 3)
-plt.scatter(time_line, second_derivative_of_monthly_CPI, color = "blue", label = "second derivative of monthly CPI")
+plt.scatter(x_data_for_second_derivative_of_monthly_CPI, y_data_for_second_derivative_of_monthly_CPI, color = "blue", label = "second derivative of monthly CPI")
 plt.plot(x_data_regression_line_of_second_derivative_of_monthly_CPI, y_data_regression_line_of_second_derivative_of_monthly_CPI, color = "lightblue", label = "regression line for the second derivative of monthly CPI")
 plt.legend(loc = "upper left")
 plt.xticks(years)
