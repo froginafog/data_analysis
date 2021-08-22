@@ -1,4 +1,3 @@
-#author: froginafog (Liang D.S.)
 import matplotlib.pyplot as plt
 from numpy.polynomial import Polynomial
 from numpy.polynomial import Chebyshev
@@ -154,6 +153,84 @@ def calculate_correlation_coefficient(y_data, y_data_predicted):
     SST = calculate_SST(y_data)
     R = (SSR/SST)**(1/2)
     return R
+
+def get_second_quartile(data): #The second quartile is the median.
+    copy_of_data = data.copy()
+    num_elements = len(copy_of_data)
+    copy_of_data.sort()
+    if(num_elements % 2 == 0):  #num_elements is even
+        return (copy_of_data[int(num_elements/2) - 1] + copy_of_data[int(num_elements/2)])/2
+    else:  #num_elements is odd
+        return copy_of_data[int((num_elements + 1)/2) - 1]
+
+def get_first_quartile(data): #The median on the subset of data on the left hand side of the second quartile.
+    copy_of_data = data.copy()
+    num_elements = len(copy_of_data)
+    copy_of_data.sort()
+    subset_of_data = []
+    if(num_elements % 2 == 0):  #num_elements is even
+        num_elements = int(num_elements/2)
+        for i in range(0, num_elements):
+            subset_of_data.append(copy_of_data[i])
+        num_elements = len(subset_of_data)
+        if(num_elements % 2 == 0):  #num_elements is even
+            return (subset_of_data[int(num_elements/2) - 1] + data[int(num_elements/2)])/2
+        else:  #num_elements is odd
+            return subset_of_data[int((num_elements + 1)/2) - 1]
+    else:  #num_elements is odd
+        index_of_median = int(num_elements/2)
+        for i in range(0, index_of_median):
+            subset_of_data.append(copy_of_data[i])
+        num_elements = len(subset_of_data)
+        if(num_elements % 2 == 0):  #num_elements is even
+            return (subset_of_data[int(num_elements/2) - 1] + subset_of_data[int(num_elements/2)])/2
+        else:  #num_elements is odd
+            return subset_of_data[int((num_elements + 1)/2) - 1]
+
+def get_third_quartile(data): #The median on the subset of data on the right hand side of the second quartile.
+    copy_of_data = data.copy()
+    num_elements = len(data)
+    copy_of_data.sort()
+    subset_of_data = []
+    if(num_elements % 2 == 0):  #num_elements is even
+        for i in range(int(num_elements/2), num_elements):
+            subset_of_data.append(copy_of_data[i])
+        num_elements = len(subset_of_data)
+        if(num_elements % 2 == 0):  #num_elements is even
+            return (subset_of_data[int(num_elements/2) - 1] + subset_of_data[int(num_elements/2)])/2
+        else:  #num_elements is odd
+            return subset_of_data[int((num_elements + 1)/2) - 1]
+    else:  #num_elements is odd
+        index_of_median = int(num_elements/2)
+        for i in range(index_of_median + 1, num_elements):
+            subset_of_data.append(data[i])
+        num_elements = len(subset_of_data)
+        if(num_elements % 2 == 0):  #num_elements is even
+            return (subset_of_data[int(num_elements/2) - 1] + subset_of_data[int(num_elements/2)])/2
+        else:  #num_elements is odd
+            return subset_of_data[int((num_elements + 1)/2) - 1]
+
+def calculate_interquartile_range(data):
+    copy_of_data = data.copy()
+    first_quartile = get_first_quartile(copy_of_data)
+    third_quartile = get_third_quartile(copy_of_data)
+    interquartile_range = third_quartile - first_quartile
+    return interquartile_range
+
+def get_outliers(data):
+    copy_of_data = data.copy()
+    interquartile_range = calculate_interquartile_range(copy_of_data)
+    first_quartile = get_first_quartile(copy_of_data)
+    third_quartile = get_third_quartile(copy_of_data)
+    lower_bound = first_quartile - 1.5 * interquartile_range
+    upper_bound = third_quartile + 1.5 * interquartile_range
+    outliers = []
+    for value in data:
+        if(value < lower_bound):
+            outliers.append(value)
+        if(value > upper_bound):
+            outliers.append(value)
+    return outliers
 
 years = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012]
 num_years = len(years)    
@@ -401,6 +478,27 @@ while(x <= x_max_of_second_derivative_of_monthly_CPI):
     x_data_regression_line_of_second_derivative_of_monthly_CPI.append(x)
     y_data_regression_line_of_second_derivative_of_monthly_CPI.append(calculate_predicted_y(x, b_0_of_second_derivative_of_monthly_CPI, b_1_of_second_derivative_of_monthly_CPI))
     x = x + 1/12
+
+#------------------------------------------------------------
+
+outliers_of_monthly_CPI = get_outliers(monthly_CPI)
+print("outliers_of_monthly_CPI:")
+print(outliers_of_monthly_CPI)
+print()
+
+#------------------------------------------------------------
+
+print("outliers_of_y_data_for_first_derivative_of_monthly_CPI:")
+outliers_of_y_data_for_first_derivative_of_monthly_CPI = get_outliers(y_data_for_first_derivative_of_monthly_CPI)
+print(outliers_of_y_data_for_first_derivative_of_monthly_CPI)
+print()
+
+#------------------------------------------------------------
+
+print("outliers_of_y_data_for_second_derivative_of_monthly_CPI:")
+outliers_of_y_data_for_second_derivative_of_monthly_CPI = get_outliers(y_data_for_second_derivative_of_monthly_CPI)
+print(outliers_of_y_data_for_second_derivative_of_monthly_CPI)
+print()
 
 #------------------------------------------------------------
 
