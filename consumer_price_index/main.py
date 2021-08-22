@@ -1,4 +1,3 @@
-#author: froginafog (Liang D.S.)
 import matplotlib.pyplot as plt
 from numpy.polynomial import Polynomial
 from numpy.polynomial import Chebyshev
@@ -232,6 +231,25 @@ def get_outliers(data):
         if(value > upper_bound):
             outliers.append(value)
     return outliers
+
+def remove_outliers(x_data, y_data):
+    outliers = get_outliers(y_data)
+    x_data_without_outliers = []
+    y_data_without_outliers = []
+    indices_at_which_outliers_are_removed = []
+    num_data_points = len(y_data)
+    num_outliers = len(outliers)
+    for i in range(0, num_data_points):
+        is_outlier = False
+        for j in range(0, num_outliers):
+            if(y_data[i] == outliers[j]):
+                is_outlier = True
+                indices_at_which_outliers_are_removed.append(i)
+                break
+        if(is_outlier == False):
+            x_data_without_outliers.append(x_data[i])
+            y_data_without_outliers.append(y_data[i])
+    return x_data_without_outliers, y_data_without_outliers, indices_at_which_outliers_are_removed
 
 years = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012]
 num_years = len(years)    
@@ -502,6 +520,32 @@ print(outliers_of_y_data_for_second_derivative_of_monthly_CPI)
 print()
 
 #------------------------------------------------------------
+#remove the points from the monthly CPI where the second derivative contains outliers
+
+x_data_for_second_derivative_of_monthly_CPI_without_outliers = []
+y_data_for_second_derivative_of_monthly_CPI_without_outliers = []
+indices_at_which_outliers_are_removed = []
+x_data_for_second_derivative_of_monthly_CPI_without_outliers, y_data_for_second_derivative_of_monthly_CPI_without_outliers, indices_at_which_outliers_are_removed = remove_outliers(x_data_for_second_derivative_of_monthly_CPI, y_data_for_second_derivative_of_monthly_CPI)
+
+x_data_of_monthly_CPI_without_outliers_in_the_second_derivative = []
+y_data_of_monthly_CPI_without_outliers_in_the_second_derivative = []
+
+num_points_time_line = len(time_line)
+num_outliers = len(indices_at_which_outliers_are_removed)
+for i in range(0, num_points_time_line):
+    is_outlier_index = False
+    for j in range(0, num_outliers):
+        if(i == indices_at_which_outliers_are_removed[j]):
+            is_outlier_index = True
+    if(is_outlier_index == False):
+        x_data_of_monthly_CPI_without_outliers_in_the_second_derivative.append(time_line[i])
+        y_data_of_monthly_CPI_without_outliers_in_the_second_derivative.append(monthly_CPI[i])
+
+#------------------------------------------------------------
+
+plot_1 = plt.figure(1)
+
+#------------------------------------------------------------
 
 plt.subplot(3, 1, 1) #plt.subplot(number of rows of plots, number of columns of plots, plot number)
 plt.scatter(years, average_CPI_of_each_year, color = "red", label = "average annual CPI")
@@ -539,6 +583,20 @@ plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("Second Derivative Of CPI")
 #plt.title("Second Derivative Of Consumer Price Index CPI")
+plt.grid()
+
+#------------------------------------------------------------
+
+plot_2 = plt.figure(2)
+
+#------------------------------------------------------------
+
+plt.scatter(x_data_of_monthly_CPI_without_outliers_in_the_second_derivative, y_data_of_monthly_CPI_without_outliers_in_the_second_derivative, color = "blue", label = "monthly CPI without outliers in the second derivative")
+plt.legend(loc = "upper left")
+plt.xticks(years)
+plt.xlabel("Year")
+plt.ylabel("CPI")
+#plt.title("Consumer Price Index CPI")
 plt.grid()
 
 #------------------------------------------------------------
