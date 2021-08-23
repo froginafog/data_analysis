@@ -1,3 +1,4 @@
+#author: froginafog (Liang D.S.)
 import matplotlib.pyplot as plt
 from numpy.polynomial import Polynomial
 from numpy.polynomial import Chebyshev
