@@ -1,4 +1,3 @@
-#author: froginafog (Liang D.S.)
 import matplotlib.pyplot as plt
 from numpy.polynomial import Polynomial
 from numpy.polynomial import Chebyshev
@@ -543,7 +542,7 @@ for i in range(0, num_points_time_line):
         y_data_of_monthly_CPI_without_outliers_in_the_first_derivative.append(monthly_CPI[i])
 
 #------------------------------------------------------------
-#create the list of outliers of the montly CPI based on the outliers of the first derivative of the montly CPI
+#create the list of outliers of the montly CPI based on the outliers of the first derivative of the monthly CPI
 
 x_data_for_outliers_of_monthly_CPI_based_on_the_outliers_of_the_first_derivative = []
 y_data_for_outliers_of_monthly_CPI_based_on_the_outliers_of_the_first_derivative = []
