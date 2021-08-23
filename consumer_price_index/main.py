@@ -1,4 +1,3 @@
-#author: froginafog (Liang D.S.)
 import matplotlib.pyplot as plt
 from numpy.polynomial import Polynomial
 from numpy.polynomial import Chebyshev
@@ -543,6 +542,21 @@ for i in range(0, num_points_time_line):
         y_data_of_monthly_CPI_without_outliers_in_the_second_derivative.append(monthly_CPI[i])
 
 #------------------------------------------------------------
+#create the list of outliers of the montly CPI based on the outliers of the second derivative of the montly CPI
+
+x_data_for_outliers_of_monthly_CPI_based_on_the_outliers_of_the_second_derivative = []
+y_data_for_outliers_of_monthly_CPI_based_on_the_outliers_of_the_second_derivative = []
+
+for i in range(0, num_points_time_line):
+    is_outlier_index = False
+    for j in range(0, num_outliers):
+        if(i == indices_at_which_outliers_are_removed[j]):
+            is_outlier_index = True
+    if(is_outlier_index == True):        
+        x_data_for_outliers_of_monthly_CPI_based_on_the_outliers_of_the_second_derivative.append(time_line[i])
+        y_data_for_outliers_of_monthly_CPI_based_on_the_outliers_of_the_second_derivative.append(monthly_CPI[i])
+
+#------------------------------------------------------------
 
 plot_1 = plt.figure(1)
 
@@ -593,6 +607,7 @@ plot_2 = plt.figure(2)
 #------------------------------------------------------------
 
 plt.scatter(x_data_of_monthly_CPI_without_outliers_in_the_second_derivative, y_data_of_monthly_CPI_without_outliers_in_the_second_derivative, color = "blue", label = "monthly CPI without outliers in the second derivative")
+plt.scatter(x_data_for_outliers_of_monthly_CPI_based_on_the_outliers_of_the_second_derivative, y_data_for_outliers_of_monthly_CPI_based_on_the_outliers_of_the_second_derivative, color = "orange", label = "outliers of monthly CPI based on the outliers of the second derivative")
 plt.legend(loc = "upper left")
 plt.xticks(years)
 plt.xlabel("Year")
