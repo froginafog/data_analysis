@@ -1,4 +1,3 @@
-#author: froginafog (Liang D.S.)
 import matplotlib.pyplot as plt
 
 def matrix_transpose(A):
@@ -98,10 +97,10 @@ def calculate_standard_deviation(a):
     sample_standard_deviation = (total/(N-1))**(1/2)
     return sample_standard_deviation
 
-def label_bars(x_data, y_data):  #label each bar with its y-value
-    num_elements = len(x_data)
-    for i in range(0, num_elements):
-        plt.text(i, y_data[i], y_data[i], ha = "center")
+def label_bars(plt, x_data, y_data): #label each bar with its y-value
+    num_items = len(x_data)
+    for i in range(0, num_items):
+        plt.text(x_data[i], y_data[i], str(y_data[i]), ha = "center")
 
 heights = [60, 60.5, 61, 61, 61.5, 63.5, 63.5, 63.5, 64, 64, 64, 64, 64, 64, 64, 64.5, 64.5, 64.5, 64.5, 64.5, 64.5, 64.5, 64.5,
            66, 66, 66, 66, 66, 66, 66, 66, 66, 66, 66.5, 66.5, 66.5, 66.5, 66.5, 66.5, 66.5, 66.5, 66.5, 66.5, 66.5,
@@ -184,17 +183,9 @@ plt.ylabel("relative_frequencies_of_heights_in_each_interval")
 plt.title("relative frequencies of heights of the sample group of people")
 
 #label each bar with its y-value
-label_bars(intervals_of_heights, relative_frequencies_of_heights_in_each_interval)
+label_bars(plt, intervals_of_heights, relative_frequencies_of_heights_in_each_interval)
 
 plt.show()
-
-
-
-
-
-
-
-
 
 
 
