@@ -1,3 +1,4 @@
+#author: froginafog (Liang D.S.)
 import matplotlib.pyplot as plt
 
 def table_to_string(names_of_columns, table, starting_row, ending_row, starting_column, ending_column):
