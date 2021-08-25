@@ -1,7 +1,7 @@
-#author: froginafog (Liang D.S.)
 import matplotlib.pyplot as plt
 from numpy.polynomial import Polynomial
 from numpy.polynomial import Chebyshev
+import csv
 
 def table_to_string(names_of_columns, table, starting_row, ending_row, starting_column, ending_column):
     num_rows = len(table)
@@ -251,6 +251,16 @@ def remove_outliers(x_data, y_data):
             x_data_without_outliers.append(x_data[i])
             y_data_without_outliers.append(y_data[i])
     return x_data_without_outliers, y_data_without_outliers, indices_at_which_outliers_are_removed
+
+def save_table_as_csv(column_names, table, filepath):
+    new_table = []
+    new_table.append(column_names)
+    num_rows = len(table)
+    for i in range(0, num_rows):
+        new_table.append(table[i].copy())
+    with open(filepath, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(new_table)  
 
 years = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012]
 num_years = len(years)    
@@ -598,6 +608,10 @@ for i in range(0, num_points_time_line):
 
 #------------------------------------------------------------
 
+save_table_as_csv(column_names, CPI_table, "CPI_table.csv")
+
+#------------------------------------------------------------
+
 plot_1 = plt.figure(1)
 
 #------------------------------------------------------------
@@ -673,3 +687,4 @@ plt.grid()
 #------------------------------------------------------------
 
 plt.show()
+
