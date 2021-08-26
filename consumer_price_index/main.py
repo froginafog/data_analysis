@@ -1,8 +1,8 @@
-#author: froginafog (Liang D.S.)
 import matplotlib.pyplot as plt
 from numpy.polynomial import Polynomial
 from numpy.polynomial import Chebyshev
 import csv
+import pandas
 
 def table_to_string(names_of_columns, table, starting_row, ending_row, starting_column, ending_column):
     num_rows = len(table)
@@ -263,27 +263,35 @@ def save_table_as_csv(column_names, table, filepath):
         writer = csv.writer(file)
         writer.writerows(new_table)  
 
-years = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012]
-num_years = len(years)    
+def csv_to_pandas(filepath):
+    df = pandas.read_csv(filepath)
+    pandas.options.display.max_rows = None
+    pandas.options.display.max_columns = None
+    return df
+
+def pandas_to_table(df):
+    column_names = df.columns.tolist()
+    table = df.values.tolist()
+    return column_names, table
+
+filepath = "CPI_table_input.csv"
+df = csv_to_pandas(filepath)
 
 #CPI = consumer prices index
-CPI_table = [
-                ["2003", 181.7, 183.1, 184.2, 183.8, 183.5, 183.7, 183.9, 184.6, 185.2, 185.0, 184.5, 184.3],
-                ["2004", 185.2, 186.2, 187.4, 188.0, 189.1, 189.7, 189.4, 189.5, 189.9, 190.9, 191.0, 190.3],
-                ["2005", 190.7, 191.8, 193.3, 194.6, 194.4, 194.5, 195.4, 196.4, 198.8, 199.2, 197.6, 196.8],
-                ["2006", 198.3, 198.7, 199.8, 201.5, 202.5, 202.9, 203.5, 203.9, 202.9, 201.8, 201.5, 201.8],
-                ["2007", 202.4, 203.5, 205.4, 206.7, 208.0, 208.4, 208.3, 207.9, 208.4, 208.9, 210.2, 210.0],
-                ["2008", 211.1, 211.7, 213.5, 214.8, 216.6, 218.8, 220.0, 219.1, 218.8, 216.6, 212.4, 210.2],
-                ["2009", 211.1, 212.2, 212.7, 213.2, 213.9, 215.7, 215.4, 215.8, 216.0, 216.2, 216.3, 216.0],
-                ["2010", 216.7, 216.7, 217.6, 218.0, 218.2, 218.0, 218.0, 218.3, 218.4, 218.7, 218.8, 219.2],
-                ["2011", 220.2, 221.3, 223.5, 224.9, 226.0, 225.7, 225.9, 226.6, 226.9, 226.4, 226.2, 225.7],
-                ["2012", 226.7, 227.7, 229.4, 230.1, 229.8, 229.5, 229.1, 230.4, 231.4, 231.3, 230.2, 229.6]
-            ]
+column_names, CPI_table = pandas_to_table(df)
 
-num_rows = len(CPI_table)
-num_columns = len(CPI_table[0])
+num_rows = df.shape[0]
+num_columns = df.shape[1]
 
-column_names = ["year", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "mean", "median", "std dev"]
+years = []
+
+for i in range(0, num_rows):
+    CPI_table[i][0] = int(CPI_table[i][0])
+    years.append(CPI_table[i][0])
+    
+num_years = len(years)
+#table_string = table_to_string(column_names, CPI_table, 0, num_rows, 0, num_columns)
+#print(table_string)
 
 #------------------------------------------------------------
 
@@ -293,10 +301,10 @@ for i in range(0, num_rows):
     average = calculate_mean(CPI_table[i][1:num_columns])
     average = round(average, 1)
     average_CPI_of_each_year.append(average)
-
+    
 push_back_column(average_CPI_of_each_year, CPI_table)
-
-num_columns += 1 
+column_names.append("mean")
+num_columns = len(column_names)
 
 #------------------------------------------------------------
 
@@ -308,8 +316,8 @@ for i in range(0, num_rows):
     median_of_each_year.append(median)
 
 push_back_column(median_of_each_year, CPI_table)
-
-num_columns += 1 
+column_names.append("median")
+num_columns = len(column_names)
 
 #------------------------------------------------------------
 
@@ -321,13 +329,16 @@ for i in range(0, num_rows):
     standard_deviation_of_each_year.append(standard_deviation)
 
 push_back_column(standard_deviation_of_each_year, CPI_table)
-
-num_columns += 1 
+column_names.append("std dev")
+num_columns = len(column_names) 
 
 #------------------------------------------------------------     
 
 CPI_table_string = table_to_string(column_names, CPI_table, 0, num_rows, 0, num_columns)
 print(CPI_table_string)
+print("num_rows:", num_rows)
+print("num_columns:", num_columns)
+print()
 
 #------------------------------------------------------------
 
@@ -609,7 +620,7 @@ for i in range(0, num_points_time_line):
 
 #------------------------------------------------------------
 
-save_table_as_csv(column_names, CPI_table, "CPI_table.csv")
+save_table_as_csv(column_names, CPI_table, "CPI_table_output.csv")
 
 #------------------------------------------------------------
 
