@@ -1,4 +1,3 @@
-#froginafog (Liang D.S.)
 def remove_repeated_data(data):
     num_elements_in_data = len(data)
     unique_data = []
@@ -47,7 +46,7 @@ def a_is_subset_of_S(a, S):
             return False
     return True
 
-#probability that if b occured then a occurs
+#probability that if b occurred then a occurs
 #S = sample space
 #a = event "a" in S
 #b = event "b" in S
