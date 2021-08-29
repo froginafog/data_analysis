@@ -1,3 +1,4 @@
+#froginafog (Liang D.S.)
 def remove_repeated_data(data):
     num_elements_in_data = len(data)
     unique_data = []
