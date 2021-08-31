@@ -1,5 +1,7 @@
 def remove_repeated_data(data):
     num_elements_in_data = len(data)
+    if(num_elements_in_data == 0):
+        return data
     unique_data = []
     unique_data.append(data[0])
     for i in range(1, num_elements_in_data):
