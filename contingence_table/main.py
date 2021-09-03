@@ -106,8 +106,6 @@ for i in range(0, num_rows):
 for i in range(0, num_rows):
     print("probability of " + table_of_num_of_items[i][0] + ": " + str(probability_of_each_R[i]))
 
-print()
-
 #probabilities of C
 
 probability_of_each_C = [] 
@@ -132,6 +130,42 @@ for i in range(0, num_rows):
             print(table_of_num_of_items[i][0] + " and " + column_names[j] + " are mutually independent")
         else:
             print(table_of_num_of_items[i][0] + " and " + column_names[j] + " are not mutually independent") 
-    print()
+
+print()
 
 #probabilities of if C occurred then R occurs
+#P(R|C) = P(R AND C)/P(C)
+    
+for i in range(0, num_rows):
+    for j in range(1, num_columns):
+        probability_of_if_C_then_R = table_of_probabilities_of_num_of_items[i][j] / probability_of_each_C[j - 1]
+        probability_of_if_C_then_R = round(probability_of_if_C_then_R, 4)
+        print("probability of if " + column_names[j] + " then " + table_of_num_of_items[i][0] + ": " + str(probability_of_if_C_then_R))
+
+print()
+
+#probabilities of if R occurred then C occurs
+#P(C|R) = P(R AND C)/P(R)
+    
+for i in range(0, num_rows):
+    for j in range(1, num_columns):
+        probability_of_if_R_then_C = table_of_probabilities_of_num_of_items[i][j] / probability_of_each_R[i]
+        probability_of_if_R_then_C = round(probability_of_if_R_then_C, 4)
+        print("probability of if " + table_of_num_of_items[i][0] + " then " + column_names[j] + ": " + str(probability_of_if_R_then_C))
+print()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
