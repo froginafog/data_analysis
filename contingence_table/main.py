@@ -61,14 +61,33 @@ print("num_rows:", num_rows)
 print("num_columns:", num_columns)
 print()
 
-column_names, table = pandas_to_table(df)
+column_names, table_of_num_of_items = pandas_to_table(df)
 
-table_string = table_to_string(column_names, table, 0, num_rows, 0, num_columns)
-print("table of value:")
-print(table_string)
+string_of_table_of_num_of_items = table_to_string(column_names, table_of_num_of_items, 0, num_rows, 0, num_columns)
+print("table of number of items with different intersecting R and C features:")
+print(string_of_table_of_num_of_items)
 
+total_num_of_items = 0
 for i in range(0, num_rows):
     for j in range(1, num_columns):
-        print("value of (" + str(table[i][0]) + " AND " + str(column_names[j]) + ") is " + str(table[i][j]))
+        print("number of items of (" + str(table_of_num_of_items[i][0]) + " AND " + str(column_names[j]) + ") is " + str(table_of_num_of_items[i][j]))
+        total_num_of_items += table_of_num_of_items[i][j]
     print()
+
+print("total number of items:", total_num_of_items)
+print()
+
+table_of_probabilities_of_num_of_items = []
+
+for i in range(0, num_rows):
+    row = []
+    row.append(table_of_num_of_items[i][0])
+    for j in range(1, num_columns):
+        probability_of_item = table_of_num_of_items[i][j]/total_num_of_items
+        row.append(probability_of_item)
+    table_of_probabilities_of_num_of_items.append(row)
+
+string_of_table_of_probabilities_of_num_of_items = table_to_string(column_names, table_of_probabilities_of_num_of_items, 0, num_rows, 0, num_columns)
+print("table of probabilities of number of items with different intersecting R and C features:")
+print(string_of_table_of_probabilities_of_num_of_items)
 
