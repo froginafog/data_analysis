@@ -49,7 +49,7 @@ def pandas_to_table(df):
     table = df.values.tolist()
     return column_names, table
 
-filepath = "contingent_table_data.csv"
+filepath = "contingence_table_data.csv"
 df = csv_to_pandas(filepath)
 print("pandas dataframe:")
 print(df)
@@ -64,11 +64,11 @@ print()
 column_names, table = pandas_to_table(df)
 
 table_string = table_to_string(column_names, table, 0, num_rows, 0, num_columns)
-print("table:")
+print("table of value:")
 print(table_string)
 
 for i in range(0, num_rows):
     for j in range(1, num_columns):
-        print("probability of (" + str(table[i][0]) + " AND " + str(column_names[j]) + ") is " + str(table[i][j]))
+        print("value of (" + str(table[i][0]) + " AND " + str(column_names[j]) + ") is " + str(table[i][j]))
     print()
 
