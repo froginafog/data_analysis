@@ -77,6 +77,8 @@ for i in range(0, num_rows):
 print("total number of items:", total_num_of_items)
 print()
 
+#probabilities of each R AND C
+
 table_of_probabilities_of_num_of_items = []
 
 for i in range(0, num_rows):
@@ -121,4 +123,15 @@ for j in range(1, num_columns):
 
 print()
 
+#check if each pair of R and C are mutually independent
+#if P(R AND C) = P(R) * P(C), then R and C are mutually independent
 
+for i in range(0, num_rows):
+    for j in range(1, num_columns):
+        if(table_of_probabilities_of_num_of_items[i][j] == probability_of_each_R[i] * probability_of_each_C[j - 1]):
+            print(table_of_num_of_items[i][0] + " and " + column_names[j] + " are mutually independent")
+        else:
+            print(table_of_num_of_items[i][0] + " and " + column_names[j] + " are not mutually independent") 
+    print()
+
+#probabilities of if C occurred then R occurs
