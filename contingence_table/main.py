@@ -91,3 +91,34 @@ string_of_table_of_probabilities_of_num_of_items = table_to_string(column_names,
 print("table of probabilities of number of items with different intersecting R and C features:")
 print(string_of_table_of_probabilities_of_num_of_items)
 
+#probabilities of R
+
+probability_of_each_R = [] 
+
+for i in range(0, num_rows):
+    total_in_row = 0
+    for j in range(1, num_columns):
+        total_in_row += table_of_probabilities_of_num_of_items[i][j]
+    probability_of_each_R.append(round(total_in_row, 2))   
+
+for i in range(0, num_rows):
+    print("probability of " + table_of_num_of_items[i][0] + ": " + str(probability_of_each_R[i]))
+
+print()
+
+#probabilities of C
+
+probability_of_each_C = [] 
+
+for j in range(1, num_columns):
+    total_in_column = 0
+    for i in range(0, num_rows):
+        total_in_column += table_of_probabilities_of_num_of_items[i][j]
+    probability_of_each_C.append(round(total_in_column, 2))
+
+for j in range(1, num_columns):
+    print("probability of " + column_names[j] + ": " + str(probability_of_each_C[j - 1]))
+
+print()
+
+
