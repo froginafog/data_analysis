@@ -77,7 +77,7 @@ for i in range(0, num_rows):
 print("total number of items:", total_num_of_items)
 print()
 
-#probabilities of each R AND C
+#probabilities of each (R AND C)
 
 table_of_probabilities_of_num_of_items = []
 
@@ -86,12 +86,22 @@ for i in range(0, num_rows):
     row.append(table_of_num_of_items[i][0])
     for j in range(1, num_columns):
         probability_of_item = table_of_num_of_items[i][j]/total_num_of_items
+        probability_of_item = round(probability_of_item, 6)
         row.append(probability_of_item)
     table_of_probabilities_of_num_of_items.append(row)
 
 string_of_table_of_probabilities_of_num_of_items = table_to_string(column_names, table_of_probabilities_of_num_of_items, 0, num_rows, 0, num_columns)
 print("table of probabilities of number of items with different intersecting R and C features:")
 print(string_of_table_of_probabilities_of_num_of_items)
+
+#probabilities of (R AND C)
+
+for i in range(0, num_rows):
+    for j in range(1, num_columns):
+        probability_of_R_AND_C = table_of_probabilities_of_num_of_items[i][j]
+        print("probability of (" + table_of_num_of_items[i][0] + " AND " + column_names[j] + "): " + str(probability_of_R_AND_C))
+        
+print()
 
 #probabilities of R
 
@@ -101,7 +111,7 @@ for i in range(0, num_rows):
     total_in_row = 0
     for j in range(1, num_columns):
         total_in_row += table_of_probabilities_of_num_of_items[i][j]
-    probability_of_each_R.append(round(total_in_row, 2))   
+    probability_of_each_R.append(round(total_in_row, 6))   
 
 for i in range(0, num_rows):
     print("probability of " + table_of_num_of_items[i][0] + ": " + str(probability_of_each_R[i]))
@@ -114,7 +124,7 @@ for j in range(1, num_columns):
     total_in_column = 0
     for i in range(0, num_rows):
         total_in_column += table_of_probabilities_of_num_of_items[i][j]
-    probability_of_each_C.append(round(total_in_column, 2))
+    probability_of_each_C.append(round(total_in_column, 6))
 
 for j in range(1, num_columns):
     print("probability of " + column_names[j] + ": " + str(probability_of_each_C[j - 1]))
@@ -133,13 +143,25 @@ for i in range(0, num_rows):
 
 print()
 
-#probabilities of if C occurred then R occurs
+#probabilities of (R OR C)
+#P(R AND C) + P(R OR C) = P(R) + P(C)
+#P(R OR C) = P(R) + P(C) - P(R AND C)
+
+for i in range(0, num_rows):
+    for j in range(1, num_columns):
+        probability_of_R_OR_C = probability_of_each_R[i] + probability_of_each_C[j - 1] - table_of_probabilities_of_num_of_items[i][j]
+        probability_of_R_OR_C = round(probability_of_R_OR_C, 6)
+        print("probability of (" + table_of_num_of_items[i][0] + " OR " + column_names[j] + "): " + str(probability_of_R_OR_C))
+
+print()
+
+#probabilities of if C occurred then R occurs 
 #P(R|C) = P(R AND C)/P(C)
     
 for i in range(0, num_rows):
     for j in range(1, num_columns):
         probability_of_if_C_then_R = table_of_probabilities_of_num_of_items[i][j] / probability_of_each_C[j - 1]
-        probability_of_if_C_then_R = round(probability_of_if_C_then_R, 4)
+        probability_of_if_C_then_R = round(probability_of_if_C_then_R, 6)
         print("probability of if " + column_names[j] + " then " + table_of_num_of_items[i][0] + ": " + str(probability_of_if_C_then_R))
 
 print()
@@ -150,8 +172,9 @@ print()
 for i in range(0, num_rows):
     for j in range(1, num_columns):
         probability_of_if_R_then_C = table_of_probabilities_of_num_of_items[i][j] / probability_of_each_R[i]
-        probability_of_if_R_then_C = round(probability_of_if_R_then_C, 4)
+        probability_of_if_R_then_C = round(probability_of_if_R_then_C, 6)
         print("probability of if " + table_of_num_of_items[i][0] + " then " + column_names[j] + ": " + str(probability_of_if_R_then_C))
+
 print()
 
 
