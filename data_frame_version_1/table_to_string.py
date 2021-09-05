@@ -1,3 +1,4 @@
+#author: froginafog (Liang D.S.)
 def table_to_string(column_names, table, starting_row, ending_row, starting_column, ending_column):
     num_rows = len(table)
     temp_table = []
