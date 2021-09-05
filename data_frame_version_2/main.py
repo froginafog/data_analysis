@@ -1,3 +1,4 @@
+#author: froginafog (Liang D.S.)
 import pandas
 
 def table_to_string(table_name, row_names, column_names, matrix):
