@@ -1,3 +1,4 @@
+#author: froginafog (Liang D.S.)
 #contingence table
 
 import pandas
