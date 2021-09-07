@@ -90,7 +90,24 @@ def pandas_to_table(df):
         for j in range(1, num_columns):
             row.append(temp_matrix[i][j])
         matrix.append(row)
-    return table_name, row_names, column_names, matrix
+    row_names_copy = row_names.copy()
+    #----------------------------------------------------------
+    num_rows = len(row_names_copy)
+    for i in range(0, num_rows):
+        if(type(row_names_copy[i]) != str and type(row_names_copy[i]) != int):
+            integer, fraction = divmod(row_names_copy[i], 1)
+            if fraction == 0:
+                row_names_copy[i] = int(integer)
+    #------------------------------------------------------            
+    num_columns = len(column_names)
+    column_names_copy = column_names.copy()
+    for j in range(0, num_columns):
+        if(type(column_names_copy[j]) != str and type(column_names_copy[j]) != int):
+            integer, fraction = divmod(column_names_copy[j], 1)
+            if fraction == 0:
+                column_names_copy[j] = int(integer)
+     #------------------------------------------------------ 
+    return table_name, row_names_copy, column_names, matrix
 
 filepath = "table_data.csv"
 df = csv_to_pandas(filepath)
