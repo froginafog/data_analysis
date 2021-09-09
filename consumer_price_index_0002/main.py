@@ -225,8 +225,27 @@ def median_each_row(column_names, matrix, original_matrix, num_digits_after_deci
     num_rows_difference = num_rows_matrix - num_rows_original_matrix
     while(num_rows_difference > 0): 
         matrix[num_rows_matrix - num_rows_difference].append("")
-        num_rows_difference -= 1 
-        
+        num_rows_difference -= 1
+
+def median_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point):
+    row_names.append("median of each column")
+    num_rows_original_matrix = len(original_matrix)
+    num_columns_original_matrix = len(original_matrix[0])
+    medians = []
+    for j in range(0, num_columns_original_matrix):
+        column = []
+        for i in range(0, num_rows_original_matrix):
+            column.append(original_matrix[i][j])
+        median = calculate_median(column)
+        median = round(median, num_digits_after_decimal_point)
+        medians.append(median)
+    num_columns_matrix = len(matrix[0])
+    num_columns_difference = num_columns_matrix - num_columns_original_matrix
+    while(num_columns_difference > 0):
+        medians.append("")
+        num_columns_difference -= 1
+    matrix.append(medians)
+            
 filepath = "CPI_table_input.csv"
 df = csv_to_pandas(filepath)
 #print("pandas dataframe:")
@@ -261,6 +280,8 @@ mean_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_po
 mean_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point)
 
 median_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point)
+
+median_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point)
 
 #--------------------------------------------------------------------------
 
