@@ -260,8 +260,6 @@ mean_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_po
 
 mean_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point)
 
-#--------------------------------------------------------------------------
-
 median_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point)
 
 #--------------------------------------------------------------------------
