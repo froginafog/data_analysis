@@ -16,7 +16,7 @@ def table_to_string(table_name, row_names, column_names, matrix):
             integer, fraction = divmod(column_names_copy[j], 1)
             if fraction == 0:
                 column_names_copy[j] = int(integer)
-     #------------------------------------------------------ 
+    #------------------------------------------------------ 
     column_0_width_max = len(table_name)
     for i in range(0, num_rows):
         width = len(str(row_names_copy[i]))
@@ -245,6 +245,31 @@ def median_each_column(row_names, matrix, original_matrix, num_digits_after_deci
         medians.append("")
         num_columns_difference -= 1
     matrix.append(medians)
+
+def calculate_standard_deviation(data):
+    N = len(data)  #size of the sample
+    total = 0
+    for n in data:
+        total = total + n
+    mean = total/N
+    total = 0
+    for n in data:
+        total = total + (n - mean)**2
+    sample_standard_deviation = (total/(N-1))**(1/2)
+    return sample_standard_deviation
+
+def standard_deviation_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point):
+    column_names.append("std dev of each row")
+    num_rows_original_matrix = len(original_matrix)
+    for i in range(0, num_rows_original_matrix):
+        std_dev = calculate_standard_deviation(original_matrix[i])
+        std_dev = round(std_dev, num_digits_after_decimal_point)
+        matrix[i].append(std_dev)
+    num_rows_matrix = len(matrix)
+    num_rows_difference = num_rows_matrix - num_rows_original_matrix
+    while(num_rows_difference > 0):
+        matrix[num_rows_matrix - num_rows_difference].append("")
+        num_rows_difference -= 1
             
 filepath = "CPI_table_input.csv"
 df = csv_to_pandas(filepath)
@@ -282,6 +307,8 @@ mean_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_po
 median_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point)
 
 median_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point)
+
+standard_deviation_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point)
 
 #--------------------------------------------------------------------------
 
