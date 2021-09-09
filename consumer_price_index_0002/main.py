@@ -151,8 +151,7 @@ def sum_each_row(column_names, matrix, original_matrix):
 def sum_each_column(row_names, matrix, original_matrix):
     row_names.append("sum of each column")
     num_rows_original_matrix = len(original_matrix)
-    row_index = 0 #index of the item in the current row
-    num_columns_original_matrix = len(original_matrix[row_index]) #number of items on the current row
+    num_columns_original_matrix = len(original_matrix[0]) 
     sums_of_each_column = []
     for j in range(0, num_columns_original_matrix):
         total = 0
@@ -160,11 +159,8 @@ def sum_each_column(row_names, matrix, original_matrix):
             total += original_matrix[i][j]
         total = round(total, 5)
         sums_of_each_column.append(total)
-        row_index += 1
-        if(row_index < num_rows_original_matrix):
-            num_items = len(original_matrix[row_index])
     num_rows_matrix = len(matrix)
-    num_columns_matrix = len(matrix[num_rows_matrix - 1])
+    num_columns_matrix = len(matrix[0])
     num_columns_difference = num_columns_matrix - num_columns_original_matrix
     while(num_columns_difference > 0):
         sums_of_each_column.append("")
@@ -205,7 +201,6 @@ def mean_each_column(row_names, matrix, original_matrix):
     while(num_columns_difference > 0):
         column_means.append("")
         num_columns_difference -= 1
-    print("column_means:", column_means)
     matrix.append(column_means)
         
 filepath = "CPI_table_input.csv"
