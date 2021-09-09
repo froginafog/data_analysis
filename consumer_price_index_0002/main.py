@@ -204,12 +204,13 @@ def mean_each_column(row_names, matrix, original_matrix, num_digits_after_decima
     matrix.append(column_means)
 
 def calculate_median(data):
-    num_elements = len(data)
-    data.sort()
+    data_copy = data.copy()
+    num_elements = len(data_copy)
+    data_copy.sort()
     if(num_elements % 2 == 0):  #num_elements is even
-        return (data[int(num_elements/2) - 1] + data[int(num_elements/2)])/2
+        return (data_copy[int(num_elements/2) - 1] + data_copy[int(num_elements/2)])/2
     else:  #num_elements is odd
-        return data[int((num_elements + 1)/2) - 1]
+        return data_copy[int((num_elements + 1)/2) - 1]
 
 def median_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point):
     column_names.append("median of each row")
@@ -236,7 +237,6 @@ original_table_name, original_row_names, original_column_names, original_matrix 
 
 table_string = table_to_string(original_table_name, original_row_names, original_column_names, original_matrix)
 
-table_string = table_to_string(original_table_name, original_row_names, original_column_names, original_matrix)
 print("original table:")
 print(table_string)
 print()
@@ -268,3 +268,4 @@ table_string = table_to_string(table_name, row_names, column_names, matrix)
 print("table_string:")
 print(table_string)
 print()
+

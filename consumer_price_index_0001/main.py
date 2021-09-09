@@ -74,12 +74,13 @@ def calculate_mean(data):
     return total/len(data)
 
 def calculate_median(data):
-    num_elements = len(data)
-    data.sort()
+    data_copy = data.copy()
+    num_elements = len(data_copy)
+    data_copy.sort()
     if(num_elements % 2 == 0):  #num_elements is even
-        return (data[int(num_elements/2) - 1] + data[int(num_elements/2)])/2
+        return (data_copy[int(num_elements/2) - 1] + data_copy[int(num_elements/2)])/2
     else:  #num_elements is odd
-        return data[int((num_elements + 1)/2) - 1]
+        return data_copy[int((num_elements + 1)/2) - 1]
 
 def calculate_standard_deviation(data):
     N = len(data)  #size of the sample
