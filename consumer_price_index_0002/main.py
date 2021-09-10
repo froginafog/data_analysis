@@ -383,6 +383,117 @@ def calculate_correlation_coefficient(y_data, y_data_predicted):
     SST = calculate_SST(y_data)
     R = (SSR/SST)**(1/2)
     return R
+
+def get_second_quartile(data): #The second quartile is the median.
+    copy_of_data = data.copy()
+    num_elements = len(copy_of_data)
+    copy_of_data.sort()
+    if(num_elements % 2 == 0):  #num_elements is even
+        return (copy_of_data[int(num_elements/2) - 1] + copy_of_data[int(num_elements/2)])/2
+    else:  #num_elements is odd
+        return copy_of_data[int((num_elements + 1)/2) - 1]
+
+def get_first_quartile(data): #The median on the subset of data on the left hand side of the second quartile.
+    copy_of_data = data.copy()
+    num_elements = len(copy_of_data)
+    copy_of_data.sort()
+    subset_of_data = []
+    if(num_elements % 2 == 0):  #num_elements is even
+        num_elements = int(num_elements/2)
+        for i in range(0, num_elements):
+            subset_of_data.append(copy_of_data[i])
+        num_elements = len(subset_of_data)
+        if(num_elements % 2 == 0):  #num_elements is even
+            return (subset_of_data[int(num_elements/2) - 1] + data[int(num_elements/2)])/2
+        else:  #num_elements is odd
+            return subset_of_data[int((num_elements + 1)/2) - 1]
+    else:  #num_elements is odd
+        index_of_median = int(num_elements/2)
+        for i in range(0, index_of_median):
+            subset_of_data.append(copy_of_data[i])
+        num_elements = len(subset_of_data)
+        if(num_elements % 2 == 0):  #num_elements is even
+            return (subset_of_data[int(num_elements/2) - 1] + subset_of_data[int(num_elements/2)])/2
+        else:  #num_elements is odd
+            return subset_of_data[int((num_elements + 1)/2) - 1]
+
+def get_third_quartile(data): #The median on the subset of data on the right hand side of the second quartile.
+    copy_of_data = data.copy()
+    num_elements = len(data)
+    copy_of_data.sort()
+    subset_of_data = []
+    if(num_elements % 2 == 0):  #num_elements is even
+        for i in range(int(num_elements/2), num_elements):
+            subset_of_data.append(copy_of_data[i])
+        num_elements = len(subset_of_data)
+        if(num_elements % 2 == 0):  #num_elements is even
+            return (subset_of_data[int(num_elements/2) - 1] + subset_of_data[int(num_elements/2)])/2
+        else:  #num_elements is odd
+            return subset_of_data[int((num_elements + 1)/2) - 1]
+    else:  #num_elements is odd
+        index_of_median = int(num_elements/2)
+        for i in range(index_of_median + 1, num_elements):
+            subset_of_data.append(data[i])
+        num_elements = len(subset_of_data)
+        if(num_elements % 2 == 0):  #num_elements is even
+            return (subset_of_data[int(num_elements/2) - 1] + subset_of_data[int(num_elements/2)])/2
+        else:  #num_elements is odd
+            return subset_of_data[int((num_elements + 1)/2) - 1]
+
+def calculate_interquartile_range(data):
+    copy_of_data = data.copy()
+    first_quartile = get_first_quartile(copy_of_data)
+    third_quartile = get_third_quartile(copy_of_data)
+    interquartile_range = third_quartile - first_quartile
+    return interquartile_range
+
+def get_outliers(data):
+    copy_of_data = data.copy()
+    interquartile_range = calculate_interquartile_range(copy_of_data)
+    first_quartile = get_first_quartile(copy_of_data)
+    third_quartile = get_third_quartile(copy_of_data)
+    lower_bound = first_quartile - 1.5 * interquartile_range
+    upper_bound = third_quartile + 1.5 * interquartile_range
+    outliers = []
+    for value in data:
+        if(value < lower_bound):
+            outliers.append(value)
+        if(value > upper_bound):
+            outliers.append(value)
+    return outliers
+
+def remove_outliers(x_data, y_data):
+    outliers = get_outliers(y_data)
+    x_data_without_outliers = []
+    y_data_without_outliers = []
+    indices_at_which_outliers_are_removed = []
+    num_data_points = len(y_data)
+    num_outliers = len(outliers)
+    for i in range(0, num_data_points):
+        is_outlier = False
+        for j in range(0, num_outliers):
+            if(y_data[i] == outliers[j]):
+                is_outlier = True
+                indices_at_which_outliers_are_removed.append(i)
+                break
+        if(is_outlier == False):
+            x_data_without_outliers.append(x_data[i])
+            y_data_without_outliers.append(y_data[i])
+    return x_data_without_outliers, y_data_without_outliers, indices_at_which_outliers_are_removed
+
+def derivative_of_data_points(x_data, y_data):
+    num_x_data_points = len(x_data)
+    num_y_data_points = len(y_data)
+    if(num_x_data_points != num_y_data_points):
+        print("Error: the number of x_data points is not equal to the number of y_data points.")
+    else:
+        derivative_of_y_data = []
+        for i in range(0, num_x_data_points - 1):
+            dx = x_data[i + 1] - x_data[i]
+            dy = y_data[i + 1] - y_data[i]
+            derivative_of_y_data.append(dy/dx)       
+        x_data_for_derivative_of_y_data = x_data[0:(num_x_data_points - 1)].copy()
+        return x_data_for_derivative_of_y_data, derivative_of_y_data
         
 filepath = "CPI_table_input.csv"
 df = csv_to_pandas(filepath)
@@ -471,6 +582,7 @@ y_data_regression_line_of_cpi = cpi_predicted_data
 
 correlation_coefficient_cpi = calculate_correlation_coefficient(cpi_data, cpi_predicted_data)
 print("correlation coefficient between cpi and the predicted cpi:", correlation_coefficient_cpi)
+print()
 
 #--------------------------------------------------------------------------
 
@@ -480,12 +592,47 @@ degree = 88 #degree of the fitting polynomial
 model_polynomial_for_cpi = Chebyshev.fit(timeline, cpi_data, degree)
 print("model_polynomial_for_cpi:")
 print(model_polynomial_for_cpi)
+print()
 
 x_data_for_model_polynomial_for_cpi = timeline
 y_data_for_model_polynomial_for_cpi = []
 
 for x in x_data_for_model_polynomial_for_cpi:
     y_data_for_model_polynomial_for_cpi.append(model_polynomial_for_cpi(x))
+
+#--------------------------------------------------------------------------
+
+outliers_of_cpi_data = get_outliers(cpi_data)
+print("outliers_of_cpi_data:", outliers_of_cpi_data)
+print()
+
+#--------------------------------------------------------------------------
+
+x_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi = derivative_of_data_points(timeline, cpi_data)
+
+#--------------------------------------------------------------------------
+
+b_1_of_first_derivative_of_cpi = calculate_slope_of_regression_line(x_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi) #slope of regression line
+b_0_of_first_derivative_of_cpi = calculate_intercept_of_regression_line(b_1_of_first_derivative_of_cpi, x_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi) #intercept of regression line
+
+if(b_0_of_first_derivative_of_cpi >= 0):
+    print("first_derivative_of_y_predicted = " + str(round(b_1_of_first_derivative_of_cpi, 3)) + " * x + " + str(round(b_0_of_first_derivative_of_cpi, 3)))
+else:  
+    print("first_derivative_of_y_predicted = " + str(round(b_1_of_first_derivative_of_cpi, 3)) + " * x - " + str(round(abs(b_0_of_first_derivative_of_cpi), 3)))
+print()
+
+y_data_for_first_derivative_of_cpi_predicted = []
+for x in x_data_for_first_derivative_of_cpi:
+    y_data_for_first_derivative_of_cpi_predicted.append(calculate_predicted_y(t, b_0_of_first_derivative_of_cpi, b_1_of_first_derivative_of_cpi))
+
+x_data_regression_line_of_first_derivative_of_cpi = x_data_for_first_derivative_of_cpi
+y_data_regression_line_of_first_derivative_of_cpi = y_data_for_first_derivative_of_cpi_predicted
+
+#--------------------------------------------------------------------------
+
+correlation_coefficient_first_derivative_cpi = calculate_correlation_coefficient(y_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi_predicted)
+print("correlation coefficient between the first derivative of cpi and the first derivative of the predicted cpi:", correlation_coefficient_first_derivative_cpi)
+print()
 
 #--------------------------------------------------------------------------
 
@@ -498,4 +645,18 @@ plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("CPI")
 plt.grid()
+
+#--------------------------------------------------------------------------
+
+plot_2 = plt.figure(2)
+plt.scatter(x_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi, color = "darkgreen", label = "first derivative of CPI")
+plt.plot(x_data_regression_line_of_first_derivative_of_cpi, y_data_regression_line_of_first_derivative_of_cpi, color = "green", label = "regression line for the first derivative of CPI")
+plt.legend(loc = "upper left")
+plt.xticks(years)
+plt.xlabel("Year")
+plt.ylabel("first derivative of CPI")
+plt.grid()
+
+#--------------------------------------------------------------------------
+
 plt.show()
