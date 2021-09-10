@@ -1,5 +1,6 @@
 import pandas
 import matplotlib.pyplot as plt
+import csv
 
 def table_to_string(table_name, row_names, column_names, matrix):
     row_names_copy = row_names.copy()
@@ -290,6 +291,40 @@ def standard_deviation_each_column(row_names, matrix, original_matrix, num_digit
         standard_deviations.append("")
         num_columns_difference -= 1
     matrix.append(standard_deviations)
+
+def table_to_csv(table_name, row_names, column_names, matrix, filepath):
+    table = []
+    row = []
+    row.append(table_name)
+    for column_name in column_names:
+        row.append(column_name)
+    table.append(row)
+    num_rows = len(matrix)
+    for i in range(0, num_rows):
+        row = []
+        row.append(row_names[i])
+        for element in matrix[i]:
+            row.append(element)
+        table.append(row)
+    with open(filepath, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(table)
+
+def calculate_slope_of_regression_line(x_data, y_data):
+    mean_x_data = calculate_mean(x_data)
+    mean_y_data = calculate_mean(y_data)
+    x_data_size = len(x_data)
+    y_data_size = len(y_data)
+    if(x_data_size != y_data_size):
+        print("The size of x_data and the size of y_data do not match.")
+        return None
+    num_points = x_data_size
+    numerator_total = 0
+    denominator_total = 0
+    for i in range(0, num_points):
+        numerator_total = numerator_total + (x_data[i] - mean_x_data) * (y_data[i] - mean_y_data)
+        denominator_total = denominator_total + (x_data[i] - mean_x_data)**2
+    return numerator_total / denominator_total #slope of the regression line
         
 filepath = "CPI_table_input.csv"
 df = csv_to_pandas(filepath)
@@ -331,6 +366,11 @@ print()
 
 #--------------------------------------------------------------------------
 
+filepath = "CPI_table_output.csv"
+table_to_csv(table_name, row_names, column_names, matrix, filepath)
+
+#--------------------------------------------------------------------------
+
 years = []
 for year in original_row_names:
     years.append(year)
@@ -360,9 +400,8 @@ plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("CPI")
 plt.grid()
+plt.show()
 
 #--------------------------------------------------------------------------
 
-plt.show()
-
-
+#calculate_slope_of_regression_line(timeline, cpi_data)
