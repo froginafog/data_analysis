@@ -636,6 +636,22 @@ print()
 
 #--------------------------------------------------------------------------
 
+#finding a relationship between data-points
+#and to draw a line of polynomial regression
+degree = 87 #degree of the fitting polynomial
+model_polynomial_for_first_derivative_of_cpi = Chebyshev.fit(x_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi, degree)
+print("model_polynomial_for_first_derivative_of_cpi:")
+print(model_polynomial_for_first_derivative_of_cpi)
+print()
+
+x_data_for_model_polynomial_for_first_derivative_of_cpi = x_data_for_first_derivative_of_cpi
+y_data_for_model_polynomial_for_first_derivative_of_cpi = []
+
+for x in x_data_for_model_polynomial_for_first_derivative_of_cpi:
+    y_data_for_model_polynomial_for_first_derivative_of_cpi.append(model_polynomial_for_first_derivative_of_cpi(x))
+
+#--------------------------------------------------------------------------
+
 plot_1 = plt.figure(1)
 plt.scatter(timeline, cpi_data, color = "midnightblue", label = "CPI")
 plt.plot(x_data_regression_line_of_cpi , y_data_regression_line_of_cpi, color = "blue", label = "regression line for CPI")
@@ -651,6 +667,7 @@ plt.grid()
 plot_2 = plt.figure(2)
 plt.scatter(x_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi, color = "darkgreen", label = "first derivative of CPI")
 plt.plot(x_data_regression_line_of_first_derivative_of_cpi, y_data_regression_line_of_first_derivative_of_cpi, color = "green", label = "regression line for the first derivative of CPI")
+plt.plot(x_data_for_model_polynomial_for_first_derivative_of_cpi, y_data_for_model_polynomial_for_first_derivative_of_cpi, color = "lightgreen", label = "polynomial fit for the first derivative of CPI")
 plt.legend(loc = "upper left")
 plt.xticks(years)
 plt.xlabel("Year")
