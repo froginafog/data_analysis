@@ -652,6 +652,62 @@ for x in x_data_for_model_polynomial_for_first_derivative_of_cpi:
 
 #--------------------------------------------------------------------------
 
+outliers_of_first_derivative_of_cpi = get_outliers(y_data_for_first_derivative_of_cpi)
+print("outliers_of_first_derivative_of_cpi:", outliers_of_first_derivative_of_cpi)
+print()
+
+#--------------------------------------------------------------------------
+
+x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi = derivative_of_data_points(x_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi)
+
+#--------------------------------------------------------------------------
+
+b_1_of_second_derivative_of_cpi = calculate_slope_of_regression_line(x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi) #slope of regression line
+b_0_of_second_derivative_of_cpi = calculate_intercept_of_regression_line(b_1_of_second_derivative_of_cpi, x_data_for_second_derivative_of_cpi, y_data_for_first_derivative_of_cpi) #intercept of regression line
+
+if(b_0_of_second_derivative_of_cpi >= 0):
+    print("second_derivative_of_y_predicted = " + str(round(b_1_of_second_derivative_of_cpi, 3)) + " * x + " + str(round(b_0_of_second_derivative_of_cpi, 3)))
+else:  
+    print("second_derivative_of_y_predicted = " + str(round(b_1_of_second_derivative_of_cpi, 3)) + " * x - " + str(round(abs(b_0_of_second_derivative_of_cpi), 3)))
+print()
+
+y_data_for_second_derivative_of_cpi_predicted = []
+for x in x_data_for_second_derivative_of_cpi:
+    y_data_for_second_derivative_of_cpi_predicted.append(calculate_predicted_y(t, b_0_of_second_derivative_of_cpi, b_1_of_second_derivative_of_cpi))
+
+x_data_regression_line_of_second_derivative_of_cpi = x_data_for_second_derivative_of_cpi
+y_data_regression_line_of_second_derivative_of_cpi = y_data_for_second_derivative_of_cpi_predicted
+
+#--------------------------------------------------------------------------
+
+correlation_coefficient_second_derivative_cpi = calculate_correlation_coefficient(y_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi_predicted)
+print("correlation coefficient between the second derivative of cpi and the second derivative of the predicted cpi:", correlation_coefficient_second_derivative_cpi)
+print()
+
+#--------------------------------------------------------------------------
+
+#finding a relationship between data-points
+#and to draw a line of polynomial regression
+degree = 87 #degree of the fitting polynomial
+model_polynomial_for_second_derivative_of_cpi = Chebyshev.fit(x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi, degree)
+print("model_polynomial_for_second_derivative_of_cpi:")
+print(model_polynomial_for_second_derivative_of_cpi)
+print()
+
+x_data_for_model_polynomial_for_second_derivative_of_cpi = x_data_for_second_derivative_of_cpi
+y_data_for_model_polynomial_for_second_derivative_of_cpi = []
+
+for x in x_data_for_model_polynomial_for_second_derivative_of_cpi:
+    y_data_for_model_polynomial_for_second_derivative_of_cpi.append(model_polynomial_for_second_derivative_of_cpi(x))
+
+#--------------------------------------------------------------------------
+
+outliers_of_second_derivative_of_cpi = get_outliers(y_data_for_second_derivative_of_cpi)
+print("outliers_of_second_derivative_of_cpi:", outliers_of_second_derivative_of_cpi)
+print()
+
+#--------------------------------------------------------------------------
+
 plot_1 = plt.figure(1)
 plt.scatter(timeline, cpi_data, color = "midnightblue", label = "CPI")
 plt.plot(x_data_regression_line_of_cpi , y_data_regression_line_of_cpi, color = "blue", label = "regression line for CPI")
@@ -672,6 +728,18 @@ plt.legend(loc = "upper left")
 plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("first derivative of CPI")
+plt.grid()
+
+#--------------------------------------------------------------------------
+
+plot_3 = plt.figure(3)
+plt.scatter(x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi, color = "darkgreen", label = "second derivative of CPI")
+plt.plot(x_data_regression_line_of_second_derivative_of_cpi, y_data_regression_line_of_second_derivative_of_cpi, color = "green", label = "regression line for the second derivative of CPI")
+plt.plot(x_data_for_model_polynomial_for_second_derivative_of_cpi, y_data_for_model_polynomial_for_second_derivative_of_cpi, color = "lightgreen", label = "polynomial fit for the second derivative of CPI")
+plt.legend(loc = "upper left")
+plt.xticks(years)
+plt.xlabel("Year")
+plt.ylabel("second derivative of CPI")
 plt.grid()
 
 #--------------------------------------------------------------------------

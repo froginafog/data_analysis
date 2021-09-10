@@ -376,7 +376,7 @@ time_line = []
 x = x_min_of_average_annual_CPI
 for i in range(0, num_rows):
     for j in range(1, num_columns - 3):
-        time_line.append(round(x,2))
+        time_line.append(x)
         x = x + 1/12  #each year interval has 12 months
 
 #------------------------------------------------------------
@@ -387,10 +387,16 @@ for i in range(0, num_rows):
     for j in range(1, num_columns - 3):
         monthly_CPI.append(CPI_table[i][j])
 
+print()
+print("monthly_CPI:", monthly_CPI)
+print()
+
 #------------------------------------------------------------
 
 b_1_of_monthly_CPI = calculate_slope_of_regression_line(time_line, monthly_CPI)    #slope of regression line
 b_0_monthly_CPI = calculate_mean(monthly_CPI) - b_1_of_monthly_CPI * calculate_mean(time_line) #intercept of regression line
+
+print("monthly_CPI_predicted = " + str(b_1_of_monthly_CPI) + " * x + " + str(b_0_monthly_CPI))
 
 monthly_CPI_predicted = []
 for n in time_line:
@@ -461,9 +467,6 @@ for i in range(0, num_points):
 #------------------------------------------------------------
 #create the data points for the first derivative of the monthly CPI
 
-x_data_for_first_derivative_of_monthly_CPI = []
-y_data_for_first_derivative_of_monthly_CPI = []
-
 x_data_for_first_derivative_of_monthly_CPI, y_data_for_first_derivative_of_monthly_CPI = derivative_of_data_points(time_line, monthly_CPI)
 
 #------------------------------------------------------------
@@ -479,6 +482,9 @@ x_data_for_second_derivative_of_monthly_CPI, y_data_for_second_derivative_of_mon
 
 b_1_of_first_derivative_of_monthly_CPI = calculate_slope_of_regression_line(x_data_for_first_derivative_of_monthly_CPI, y_data_for_first_derivative_of_monthly_CPI)    #slope of regression line
 b_0_of_first_derivative_of_monthly_CPI = calculate_mean(y_data_for_first_derivative_of_monthly_CPI) - b_1_of_first_derivative_of_monthly_CPI * calculate_mean(x_data_for_first_derivative_of_monthly_CPI) #intercept of regression line
+
+print("b_1_of_first_derivative_of_monthly_CPI:", b_1_of_first_derivative_of_monthly_CPI)
+print("b_0_of_first_derivative_of_monthly_CPI:", b_0_of_first_derivative_of_monthly_CPI)
 
 y_data_first_derivative_of_monthly_CPI_predicted = []
 
