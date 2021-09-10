@@ -297,9 +297,7 @@ df = csv_to_pandas(filepath)
 #print()
 
 original_table_name, original_row_names, original_column_names, original_matrix = pandas_to_table(df)
-
 table_string = table_to_string(original_table_name, original_row_names, original_column_names, original_matrix)
-
 print("original table:")
 print(table_string)
 print()
@@ -314,21 +312,13 @@ matrix = copy_matrix(original_matrix)
 #--------------------------------------------------------------------------
 
 num_digits_after_decimal_point = 1
-
 sum_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point)
-
 sum_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point)
-
 mean_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point)
-
 mean_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point)
-
 median_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point)
-
 median_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point)
-
 standard_deviation_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point)
-
 standard_deviation_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point)
 
 #--------------------------------------------------------------------------
@@ -337,4 +327,22 @@ table_string = table_to_string(table_name, row_names, column_names, matrix)
 print("table_string:")
 print(table_string)
 print()
+
+#--------------------------------------------------------------------------
+
+timeline = []
+num_rows = len(original_matrix)
+num_years = len(row_names)
+time = row_names[0]
+print(time)
+for i in range(0, num_rows):
+    time = row_names[i]
+    num_columns = len(original_matrix[i])
+    for j in range(0, num_columns):
+        timeline.append(time)
+        time = time + 1 / num_columns
+
+#--------------------------------------------------------------------------
+
+
 
