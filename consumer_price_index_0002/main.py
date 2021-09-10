@@ -169,6 +169,13 @@ def sum_each_column(row_names, matrix, original_matrix, num_digits_after_decimal
         num_columns_difference -= 1
     matrix.append(sums_of_each_column)
 
+def calculate_mean(data):
+    num_elements = len(data)
+    total = 0
+    for i in range(0, num_elements):
+        total += data[i]
+    return total/num_elements
+
 def mean_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point):
     column_names.append("mean of each row")
     num_rows_original_matrix = len(original_matrix)
@@ -310,7 +317,7 @@ def table_to_csv(table_name, row_names, column_names, matrix, filepath):
         writer = csv.writer(file)
         writer.writerows(table)
 
-def calculate_slope_of_regression_line(x_data, y_data):
+def calculate_slope_of_regression_line(x_data, y_data): #b_1 = slope of the regression line
     mean_x_data = calculate_mean(x_data)
     mean_y_data = calculate_mean(y_data)
     x_data_size = len(x_data)
@@ -324,7 +331,14 @@ def calculate_slope_of_regression_line(x_data, y_data):
     for i in range(0, num_points):
         numerator_total = numerator_total + (x_data[i] - mean_x_data) * (y_data[i] - mean_y_data)
         denominator_total = denominator_total + (x_data[i] - mean_x_data)**2
-    return numerator_total / denominator_total #slope of the regression line
+    return numerator_total / denominator_total
+
+def calculate_intercept_of_regression_line(slope_of_regression_line, x_data, y_data):
+    return calculate_mean(y_data) - slope_of_regression_line * calculate_mean(x_data)  #b_0 = intercept of the regression line 
+
+#y_predicted = b_0 + b_1*x
+def calculate_predicted_y(x, b_0, b_1):
+    return b_0 + b_1*x
         
 filepath = "CPI_table_input.csv"
 df = csv_to_pandas(filepath)
@@ -393,15 +407,29 @@ for i in range(0, num_rows):
 
 #--------------------------------------------------------------------------
 
+b_1_of_cpi = calculate_slope_of_regression_line(timeline, cpi_data) #slope of regression line
+b_0_of_cpi = calculate_intercept_of_regression_line(b_1_of_cpi, timeline, cpi_data) #intercept of regression line
+
+if(b_0_of_cpi >= 0):
+    print("y_predicted = " + str(b_1_of_cpi) + " * x + " + str(b_0_of_cpi))
+else:  
+    print("y_predicted = " + str(b_1_of_cpi) + " * x - " + str(abs(b_0_of_cpi)))
+
+cpi_predicted = []
+for t in timeline:
+    cpi_predicted.append(calculate_predicted_y(t, b_0_of_cpi, b_1_of_cpi))
+
+x_data_regression_line_of_cpi = timeline
+y_data_regression_line_of_cpi = cpi_predicted
+
+#--------------------------------------------------------------------------
+
 plot_1 = plt.figure(1)
 plt.scatter(timeline, cpi_data, color = "blue", label = "CPI")
+plt.plot(x_data_regression_line_of_cpi , y_data_regression_line_of_cpi, color = "blue", label = "regression line for CPI")
 plt.legend(loc = "upper left")
 plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("CPI")
 plt.grid()
 plt.show()
-
-#--------------------------------------------------------------------------
-
-#calculate_slope_of_regression_line(timeline, cpi_data)
