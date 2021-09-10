@@ -270,7 +270,26 @@ def standard_deviation_each_row(column_names, matrix, original_matrix, num_digit
     while(num_rows_difference > 0):
         matrix[num_rows_matrix - num_rows_difference].append("")
         num_rows_difference -= 1
-            
+
+def standard_deviation_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point):
+    row_names.append("std dev for each column")
+    num_rows_original_matrix = len(original_matrix)
+    num_columns_original_matrix = len(original_matrix[0])
+    standard_deviations = []
+    for j in range(0, num_columns_original_matrix):
+        column = []
+        for i in range(0, num_rows_original_matrix):
+            column.append(original_matrix[i][j])
+        std_dev = calculate_standard_deviation(column)
+        std_dev = round(std_dev, num_digits_after_decimal_point)
+        standard_deviations.append(std_dev)
+    num_columns_matrix = len(matrix[0])
+    num_columns_difference = num_columns_matrix - num_columns_original_matrix
+    while(num_columns_difference > 0):
+        standard_deviations.append("")
+        num_columns_difference -= 1
+    matrix.append(standard_deviations)
+        
 filepath = "CPI_table_input.csv"
 df = csv_to_pandas(filepath)
 #print("pandas dataframe:")
@@ -309,6 +328,8 @@ median_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_
 median_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point)
 
 standard_deviation_each_row(column_names, matrix, original_matrix, num_digits_after_decimal_point)
+
+standard_deviation_each_column(row_names, matrix, original_matrix, num_digits_after_decimal_point)
 
 #--------------------------------------------------------------------------
 
