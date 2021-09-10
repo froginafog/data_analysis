@@ -1,6 +1,7 @@
 import pandas
 import matplotlib.pyplot as plt
 import csv
+from numpy.polynomial import Chebyshev
 
 def table_to_string(table_name, row_names, column_names, matrix):
     row_names_copy = row_names.copy()
@@ -339,6 +340,49 @@ def calculate_intercept_of_regression_line(slope_of_regression_line, x_data, y_d
 #y_predicted = b_0 + b_1*x
 def calculate_predicted_y(x, b_0, b_1):
     return b_0 + b_1*x
+
+#sum of squares regression
+def calculate_SSR(y_data, y_data_predicted):
+    y_data_size = len(y_data)
+    y_data_predicted_size = len(y_data_predicted)
+    if(y_data_size != y_data_predicted_size):
+        print("The size of y_data and the size of y_data_predicted do not match.")
+    data_mean = calculate_mean(y_data)
+    SSR = 0
+    for i in range(0, y_data_size):
+        SSR = SSR + (y_data_predicted[i] - data_mean)**2
+    return SSR
+
+#sum of squares error
+def calculate_SSE(y_data, y_data_predicted):
+    y_data_size = len(y_data)
+    y_data_predicted_size = len(y_data_predicted)
+    if(y_data_size != y_data_predicted_size):
+        print("The size of y_data and the size of y_data_predicted do not match.")
+        return None
+    SSE = 0
+    for i in range(0, y_data_size):
+        SSE = SSE + (y_data[i] - y_data_predicted[i])**2
+    return SSE
+
+#sum of squares total
+def calculate_SST(y_data):
+    y_data_mean = calculate_mean(y_data)
+    SST = 0
+    for n in y_data:
+        SST = SST + (n - y_data_mean)**2
+    return SST
+
+#correlation coefficient R for y_data and y_data_predicted
+#-1 <= R <= 1
+#If R = 1, then there is a perfect positive linear relationship.
+#If R = -1, then there is a perfect negative linear relationship.
+#If R = 0, then there is a no relationship.
+def calculate_correlation_coefficient(y_data, y_data_predicted):
+    SSR = calculate_SSR(y_data, y_data_predicted)
+    SST = calculate_SST(y_data)
+    R = (SSR/SST)**(1/2)
+    return R
         
 filepath = "CPI_table_input.csv"
 df = csv_to_pandas(filepath)
@@ -414,19 +458,41 @@ if(b_0_of_cpi >= 0):
     print("y_predicted = " + str(round(b_1_of_cpi, 3)) + " * x + " + str(round(b_0_of_cpi, 3)))
 else:  
     print("y_predicted = " + str(round(b_1_of_cpi, 3)) + " * x - " + str(round(abs(b_0_of_cpi), 3)))
+print()
 
-cpi_predicted = []
+cpi_predicted_data = []
 for t in timeline:
-    cpi_predicted.append(calculate_predicted_y(t, b_0_of_cpi, b_1_of_cpi))
+    cpi_predicted_data.append(calculate_predicted_y(t, b_0_of_cpi, b_1_of_cpi))
 
 x_data_regression_line_of_cpi = timeline
-y_data_regression_line_of_cpi = cpi_predicted
+y_data_regression_line_of_cpi = cpi_predicted_data
+
+#--------------------------------------------------------------------------
+
+correlation_coefficient_cpi = calculate_correlation_coefficient(cpi_data, cpi_predicted_data)
+print("correlation coefficient between cpi and the predicted cpi:", correlation_coefficient_cpi)
+
+#--------------------------------------------------------------------------
+
+#finding a relationship between data-points
+#and to draw a line of polynomial regression
+degree = 88 #degree of the fitting polynomial
+model_polynomial_for_cpi = Chebyshev.fit(timeline, cpi_data, degree)
+print("model_polynomial_for_cpi:")
+print(model_polynomial_for_cpi)
+
+x_data_for_model_polynomial_for_cpi = timeline
+y_data_for_model_polynomial_for_cpi = []
+
+for x in x_data_for_model_polynomial_for_cpi:
+    y_data_for_model_polynomial_for_cpi.append(model_polynomial_for_cpi(x))
 
 #--------------------------------------------------------------------------
 
 plot_1 = plt.figure(1)
-plt.scatter(timeline, cpi_data, color = "blue", label = "CPI")
+plt.scatter(timeline, cpi_data, color = "midnightblue", label = "CPI")
 plt.plot(x_data_regression_line_of_cpi , y_data_regression_line_of_cpi, color = "blue", label = "regression line for CPI")
+plt.plot(x_data_for_model_polynomial_for_cpi, y_data_for_model_polynomial_for_cpi, color = "lightblue", label = "polynomial fit for CPI")
 plt.legend(loc = "upper left")
 plt.xticks(years)
 plt.xlabel("Year")
