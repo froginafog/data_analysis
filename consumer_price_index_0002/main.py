@@ -1,4 +1,5 @@
 import pandas
+import matplotlib.pyplot as plt
 
 def table_to_string(table_name, row_names, column_names, matrix):
     row_names_copy = row_names.copy()
@@ -330,13 +331,14 @@ print()
 
 #--------------------------------------------------------------------------
 
+years = []
+for year in original_row_names:
+    years.append(year)
+
 timeline = []
 num_rows = len(original_matrix)
-num_years = len(row_names)
-time = row_names[0]
-print(time)
 for i in range(0, num_rows):
-    time = row_names[i]
+    time = years[i]
     num_columns = len(original_matrix[i])
     for j in range(0, num_columns):
         timeline.append(time)
@@ -344,5 +346,23 @@ for i in range(0, num_rows):
 
 #--------------------------------------------------------------------------
 
+cpi_data = []
+for i in range(0, num_rows):
+    for j in range(0, num_columns):
+        cpi_data.append(original_matrix[i][j])
+
+#--------------------------------------------------------------------------
+
+plot_1 = plt.figure(1)
+plt.scatter(timeline, cpi_data, color = "blue", label = "CPI")
+plt.legend(loc = "upper left")
+plt.xticks(years)
+plt.xlabel("Year")
+plt.ylabel("CPI")
+plt.grid()
+
+#--------------------------------------------------------------------------
+
+plt.show()
 
 
