@@ -411,9 +411,9 @@ b_1_of_cpi = calculate_slope_of_regression_line(timeline, cpi_data) #slope of re
 b_0_of_cpi = calculate_intercept_of_regression_line(b_1_of_cpi, timeline, cpi_data) #intercept of regression line
 
 if(b_0_of_cpi >= 0):
-    print("y_predicted = " + str(b_1_of_cpi) + " * x + " + str(b_0_of_cpi))
+    print("y_predicted = " + str(round(b_1_of_cpi, 3)) + " * x + " + str(round(b_0_of_cpi, 3)))
 else:  
-    print("y_predicted = " + str(b_1_of_cpi) + " * x - " + str(abs(b_0_of_cpi)))
+    print("y_predicted = " + str(round(b_1_of_cpi, 3)) + " * x - " + str(round(abs(b_0_of_cpi), 3)))
 
 cpi_predicted = []
 for t in timeline:
