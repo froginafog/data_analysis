@@ -706,6 +706,82 @@ outliers_of_second_derivative_of_cpi = get_outliers(y_data_for_second_derivative
 print("outliers_of_second_derivative_of_cpi:", outliers_of_second_derivative_of_cpi)
 print()
 
+#------------------------------------------------------------
+#remove the points from the cpi where the first derivative contains outliers
+
+x_data_for_first_derivative_of_cpi_without_outliers = []
+y_data_for_first_derivative_of_cpi_without_outliers = []
+indices_at_which_outliers_are_removed = []
+x_data_for_first_derivative_of_cpi_without_outliers, y_data_for_first_derivative_of_cpi_without_outliers, indices_at_which_outliers_are_removed = remove_outliers(x_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi)
+
+x_data_of_cpi_without_outliers_in_the_first_derivative = []
+y_data_of_cpi_without_outliers_in_the_first_derivative = []
+
+num_points_timeline = len(timeline)
+num_outliers = len(indices_at_which_outliers_are_removed)
+for i in range(0, num_points_timeline):
+    is_outlier_index = False
+    for j in range(0, num_outliers):
+        if(i == indices_at_which_outliers_are_removed[j]):
+            is_outlier_index = True
+    if(is_outlier_index == False):
+        x_data_of_cpi_without_outliers_in_the_first_derivative.append(timeline[i])
+        y_data_of_cpi_without_outliers_in_the_first_derivative.append(cpi_data[i])
+        
+#------------------------------------------------------------
+#create the list of outliers of the cpi based on the outliers of the first derivative of the cpi
+
+x_data_for_outliers_of_cpi_based_on_the_outliers_of_the_first_derivative = []
+y_data_for_outliers_of_cpi_based_on_the_outliers_of_the_first_derivative = []
+
+for i in range(0, num_points_timeline):
+    is_outlier_index = False
+    for j in range(0, num_outliers):
+        if(i == indices_at_which_outliers_are_removed[j]):
+            is_outlier_index = True
+    if(is_outlier_index == True):        
+        x_data_for_outliers_of_cpi_based_on_the_outliers_of_the_first_derivative.append(timeline[i])
+        y_data_for_outliers_of_cpi_based_on_the_outliers_of_the_first_derivative.append(cpi_data[i])
+
+indices_at_which_outliers_are_removed.clear()
+
+#------------------------------------------------------------
+#remove the points from the cpi where the second derivative contains outliers
+
+x_data_for_second_derivative_of_cpi_without_outliers = []
+y_data_for_second_derivative_of_cpi_without_outliers = []
+indices_at_which_outliers_are_removed = []
+x_data_for_second_derivative_of_cpi_without_outliers, y_data_for_second_derivative_of_cpi_without_outliers, indices_at_which_outliers_are_removed = remove_outliers(x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi)
+
+x_data_of_cpi_without_outliers_in_the_second_derivative = []
+y_data_of_cpi_without_outliers_in_the_second_derivative = []
+
+num_points_timeline = len(timeline)
+num_outliers = len(indices_at_which_outliers_are_removed)
+for i in range(0, num_points_timeline):
+    is_outlier_index = False
+    for j in range(0, num_outliers):
+        if(i == indices_at_which_outliers_are_removed[j]):
+            is_outlier_index = True
+    if(is_outlier_index == False):
+        x_data_of_cpi_without_outliers_in_the_second_derivative.append(timeline[i])
+        y_data_of_cpi_without_outliers_in_the_second_derivative.append(cpi_data[i])
+
+#------------------------------------------------------------
+#create the list of outliers of the cpi based on the outliers of the second derivative of the cpi
+
+x_data_for_outliers_of_cpi_based_on_the_outliers_of_the_second_derivative = []
+y_data_for_outliers_of_cpi_based_on_the_outliers_of_the_second_derivative = []
+
+for i in range(0, num_points_timeline):
+    is_outlier_index = False
+    for j in range(0, num_outliers):
+        if(i == indices_at_which_outliers_are_removed[j]):
+            is_outlier_index = True
+    if(is_outlier_index == True):        
+        x_data_for_outliers_of_cpi_based_on_the_outliers_of_the_second_derivative.append(timeline[i])
+        y_data_for_outliers_of_cpi_based_on_the_outliers_of_the_second_derivative.append(cpi_data[i])
+
 #--------------------------------------------------------------------------
 
 plt.figure(1)
@@ -733,9 +809,9 @@ plt.grid()
 #--------------------------------------------------------------------------
 
 plt.figure(3)
-plt.scatter(x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi, color = "darkgreen", label = "second derivative of CPI")
-plt.plot(x_data_regression_line_of_second_derivative_of_cpi, y_data_regression_line_of_second_derivative_of_cpi, color = "green", label = "regression line for the second derivative of CPI")
-plt.plot(x_data_for_model_polynomial_for_second_derivative_of_cpi, y_data_for_model_polynomial_for_second_derivative_of_cpi, color = "lightgreen", label = "polynomial fit for the second derivative of CPI")
+plt.scatter(x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi, color = "indigo", label = "second derivative of CPI")
+plt.plot(x_data_regression_line_of_second_derivative_of_cpi, y_data_regression_line_of_second_derivative_of_cpi, color = "darkviolet", label = "regression line for the second derivative of CPI")
+plt.plot(x_data_for_model_polynomial_for_second_derivative_of_cpi, y_data_for_model_polynomial_for_second_derivative_of_cpi, color = "mediumpurple", label = "polynomial fit for the second derivative of CPI")
 plt.legend(loc = "upper left")
 plt.xticks(years)
 plt.xlabel("Year")
@@ -767,13 +843,36 @@ plt.ylabel("first derivative of CPI")
 plt.grid()
 
 plt.subplot(3, 1, 3)
-plt.scatter(x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi, color = "darkgreen", label = "second derivative of CPI")
-plt.plot(x_data_regression_line_of_second_derivative_of_cpi, y_data_regression_line_of_second_derivative_of_cpi, color = "green", label = "regression line for the second derivative of CPI")
-plt.plot(x_data_for_model_polynomial_for_second_derivative_of_cpi, y_data_for_model_polynomial_for_second_derivative_of_cpi, color = "lightgreen", label = "polynomial fit for the second derivative of CPI")
+plt.scatter(x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi, color = "indigo", label = "second derivative of CPI")
+plt.plot(x_data_regression_line_of_second_derivative_of_cpi, y_data_regression_line_of_second_derivative_of_cpi, color = "darkviolet", label = "regression line for the second derivative of CPI")
+plt.plot(x_data_for_model_polynomial_for_second_derivative_of_cpi, y_data_for_model_polynomial_for_second_derivative_of_cpi, color = "mediumpurple", label = "polynomial fit for the second derivative of CPI")
 plt.legend(loc = "upper left")
 plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("second derivative of CPI")
+plt.grid()
+
+#--------------------------------------------------------------------------
+
+plt.figure(5)
+plt.scatter(x_data_of_cpi_without_outliers_in_the_first_derivative, y_data_of_cpi_without_outliers_in_the_first_derivative, color = "blue", label = "CPI without outliers in the first derivative")
+plt.scatter(x_data_for_outliers_of_cpi_based_on_the_outliers_of_the_first_derivative, y_data_for_outliers_of_cpi_based_on_the_outliers_of_the_first_derivative, color = "orange", label = "outliers of CPI based on the outliers of the first derivative")
+plt.legend(loc = "upper left")
+plt.xticks(years)
+plt.xlabel("Year")
+plt.ylabel("CPI")
+plt.title("Consumer Price Index CPI")
+plt.grid()
+
+#--------------------------------------------------------------------------
+
+plt.figure(6)
+plt.scatter(x_data_of_cpi_without_outliers_in_the_second_derivative, y_data_of_cpi_without_outliers_in_the_second_derivative, color = "blue", label = "CPI without outliers in the second derivative")
+plt.scatter(x_data_for_outliers_of_cpi_based_on_the_outliers_of_the_second_derivative, y_data_for_outliers_of_cpi_based_on_the_outliers_of_the_second_derivative, color = "orange", label = "outliers of CPI based on the outliers of the second derivative")
+plt.legend(loc = "upper left")
+plt.xticks(years)
+plt.xlabel("Year")
+plt.ylabel("CPI")
 plt.grid()
 
 #--------------------------------------------------------------------------
