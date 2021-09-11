@@ -708,7 +708,7 @@ print()
 
 #--------------------------------------------------------------------------
 
-plot_1 = plt.figure(1)
+plt.figure(1)
 plt.scatter(timeline, cpi_data, color = "midnightblue", label = "CPI")
 plt.plot(x_data_regression_line_of_cpi , y_data_regression_line_of_cpi, color = "blue", label = "regression line for CPI")
 plt.plot(x_data_for_model_polynomial_for_cpi, y_data_for_model_polynomial_for_cpi, color = "lightblue", label = "polynomial fit for CPI")
@@ -720,11 +720,11 @@ plt.grid()
 
 #--------------------------------------------------------------------------
 
-plot_2 = plt.figure(2)
+plt.figure(2)
 plt.scatter(x_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi, color = "darkgreen", label = "first derivative of CPI")
 plt.plot(x_data_regression_line_of_first_derivative_of_cpi, y_data_regression_line_of_first_derivative_of_cpi, color = "green", label = "regression line for the first derivative of CPI")
 plt.plot(x_data_for_model_polynomial_for_first_derivative_of_cpi, y_data_for_model_polynomial_for_first_derivative_of_cpi, color = "lightgreen", label = "polynomial fit for the first derivative of CPI")
-plt.legend(loc = "upper left")
+plt.legend(loc = "lower left")
 plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("first derivative of CPI")
@@ -732,7 +732,41 @@ plt.grid()
 
 #--------------------------------------------------------------------------
 
-plot_3 = plt.figure(3)
+plt.figure(3)
+plt.scatter(x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi, color = "darkgreen", label = "second derivative of CPI")
+plt.plot(x_data_regression_line_of_second_derivative_of_cpi, y_data_regression_line_of_second_derivative_of_cpi, color = "green", label = "regression line for the second derivative of CPI")
+plt.plot(x_data_for_model_polynomial_for_second_derivative_of_cpi, y_data_for_model_polynomial_for_second_derivative_of_cpi, color = "lightgreen", label = "polynomial fit for the second derivative of CPI")
+plt.legend(loc = "upper left")
+plt.xticks(years)
+plt.xlabel("Year")
+plt.ylabel("second derivative of CPI")
+plt.grid()
+
+#--------------------------------------------------------------------------
+
+plt.figure(4)
+
+plt.subplot(3, 1, 1) #plt.subplot(number of rows of plots, number of columns of plots, plot number)
+plt.scatter(timeline, cpi_data, color = "midnightblue", label = "CPI")
+plt.plot(x_data_regression_line_of_cpi , y_data_regression_line_of_cpi, color = "blue", label = "regression line for CPI")
+plt.plot(x_data_for_model_polynomial_for_cpi, y_data_for_model_polynomial_for_cpi, color = "lightblue", label = "polynomial fit for CPI")
+plt.legend(loc = "upper left")
+plt.xticks(years)
+plt.xlabel("Year")
+plt.ylabel("CPI")
+plt.grid()
+
+plt.subplot(3, 1, 2)
+plt.scatter(x_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi, color = "darkgreen", label = "first derivative of CPI")
+plt.plot(x_data_regression_line_of_first_derivative_of_cpi, y_data_regression_line_of_first_derivative_of_cpi, color = "green", label = "regression line for the first derivative of CPI")
+plt.plot(x_data_for_model_polynomial_for_first_derivative_of_cpi, y_data_for_model_polynomial_for_first_derivative_of_cpi, color = "lightgreen", label = "polynomial fit for the first derivative of CPI")
+plt.legend(loc = "lower left")
+plt.xticks(years)
+plt.xlabel("Year")
+plt.ylabel("first derivative of CPI")
+plt.grid()
+
+plt.subplot(3, 1, 3)
 plt.scatter(x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi, color = "darkgreen", label = "second derivative of CPI")
 plt.plot(x_data_regression_line_of_second_derivative_of_cpi, y_data_regression_line_of_second_derivative_of_cpi, color = "green", label = "regression line for the second derivative of CPI")
 plt.plot(x_data_for_model_polynomial_for_second_derivative_of_cpi, y_data_for_model_polynomial_for_second_derivative_of_cpi, color = "lightgreen", label = "polynomial fit for the second derivative of CPI")
