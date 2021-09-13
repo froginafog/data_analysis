@@ -31,7 +31,7 @@ while(t <= t_max):
 
 plt.figure(1)
 
-plt.subplot(3, 1, 1) #plt.subplot(number of rows of plots, number of columns of plots, plot number)
+plt.subplot(2, 1, 1) #plt.subplot(number of rows of plots, number of columns of plots, plot number)
 plt.plot(t_data, y_data, color = "midnightblue", label = "f(t) = sin(t)")
 plt.legend(loc = "upper left")
 plt.xlabel("t")
@@ -45,7 +45,7 @@ t_min = -2*math.pi
 t_max = 2*math.pi
 n_data, y_data_sample = discretize_function(math.sin, t_min, t_max, sampling_interval) #(n_data[i], y_data_sample[i]) = i th sampling point
 
-plt.subplot(3, 1, 2) #plt.subplot(number of rows of plots, number of columns of plots, plot number)
+plt.subplot(2, 1, 2) #plt.subplot(number of rows of plots, number of columns of plots, plot number)
 plt.scatter(n_data, y_data_sample, color = "green", label = "f(n * sampling_interval) = sin(n * sampling_interval) , sampling_interval = " + str(sampling_interval))
 plt.legend(loc = "upper left")
 plt.xlabel("n")
@@ -70,7 +70,7 @@ while(t <= t_max):
 
 plt.figure(2)
 
-plt.subplot(3, 1, 1) #plt.subplot(number of rows of plots, number of columns of plots, plot number)
+plt.subplot(2, 1, 1) #plt.subplot(number of rows of plots, number of columns of plots, plot number)
 plt.plot(t_data, y_data, color = "midnightblue", label = "f(t) = cos(t)")
 plt.legend(loc = "upper left")
 plt.xlabel("t")
@@ -84,7 +84,7 @@ t_min = -2*math.pi
 t_max = 2*math.pi
 n_data, y_data_sample = discretize_function(math.cos, t_min, t_max, sampling_interval) #(n_data[i], y_data_sample[i]) = i th sampling point
 
-plt.subplot(3, 1, 2) #plt.subplot(number of rows of plots, number of columns of plots, plot number)
+plt.subplot(2, 1, 2) #plt.subplot(number of rows of plots, number of columns of plots, plot number)
 plt.scatter(n_data, y_data_sample, color = "green", label = "f(n * sampling_interval) = cos(n * sampling_interval) , sampling_interval = " + str(sampling_interval))
 plt.legend(loc = "upper left")
 plt.xlabel("n")
