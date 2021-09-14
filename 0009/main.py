@@ -80,7 +80,7 @@ dx = (x_max - x_min)/num_points
 x = x_min
 while(x <= x_max):
     x_data_3.append(x)
-    y = math.sin(x) * shifted_impulse_function(x, math.pi/2, dx/2)
+    y = math.cos(x) * shifted_impulse_function(x, math.pi/4, dx/2)
     y_data_3.append(y)
     x += dx
 
