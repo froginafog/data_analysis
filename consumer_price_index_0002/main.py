@@ -1,4 +1,3 @@
-#author: froginafog (Liang D.S.)
 import pandas
 import matplotlib.pyplot as plt
 import csv
@@ -794,6 +793,7 @@ plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("CPI")
 plt.grid()
+plt.show(block = False)
 
 #--------------------------------------------------------------------------
 
@@ -806,6 +806,7 @@ plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("first derivative of CPI")
 plt.grid()
+plt.show(block = False)
 
 #--------------------------------------------------------------------------
 
@@ -818,6 +819,7 @@ plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("second derivative of CPI")
 plt.grid()
+plt.show(block = False)
 
 #--------------------------------------------------------------------------
 
@@ -832,6 +834,7 @@ plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("CPI")
 plt.grid()
+plt.show(block = False)
 
 plt.subplot(3, 1, 2)
 plt.scatter(x_data_for_first_derivative_of_cpi, y_data_for_first_derivative_of_cpi, color = "darkgreen", label = "first derivative of CPI")
@@ -842,6 +845,7 @@ plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("first derivative of CPI")
 plt.grid()
+plt.show(block = False)
 
 plt.subplot(3, 1, 3)
 plt.scatter(x_data_for_second_derivative_of_cpi, y_data_for_second_derivative_of_cpi, color = "indigo", label = "second derivative of CPI")
@@ -852,6 +856,7 @@ plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("second derivative of CPI")
 plt.grid()
+plt.show(block = False)
 
 #--------------------------------------------------------------------------
 
@@ -864,6 +869,7 @@ plt.xlabel("Year")
 plt.ylabel("CPI")
 plt.title("Consumer Price Index CPI")
 plt.grid()
+plt.show(block = False)
 
 #--------------------------------------------------------------------------
 
@@ -875,6 +881,45 @@ plt.xticks(years)
 plt.xlabel("Year")
 plt.ylabel("CPI")
 plt.grid()
+plt.show(block = False)
+
+#--------------------------------------------------------------------------
+#regression line for each year
+
+print("regression for each year:")
+print()
+
+num_rows = len(original_matrix)
+year_start_index = 0
+year_end_index = len(original_matrix[0])
+for i in range(0, num_rows):
+    timeline_one_year = []
+    timeline_one_year = timeline[year_start_index:year_end_index]
+    year_start_index = year_end_index 
+    year_end_index = year_start_index + len(original_matrix[i])
+    b_1_of_cpi_one_year = calculate_slope_of_regression_line(timeline_one_year, original_matrix[i]) #slope of regression line
+    b_0_of_cpi_one_year = calculate_intercept_of_regression_line(b_1_of_cpi_one_year, timeline_one_year, original_matrix[i]) #intercept of regression line
+    print("for year", timeline_one_year[0], ": ", end = "")
+    if(b_0_of_cpi >= 0):
+        print("y_predicted = " + str(round(b_1_of_cpi_one_year, 3)) + " * x + " + str(round(b_0_of_cpi_one_year, 3)))
+    else:  
+        print("y_predicted = " + str(round(b_1_of_cpi_one_year, 3)) + " * x - " + str(round(abs(b_0_of_cpi_one_year), 3)))
+    print()
+    cpi_predicted_data_one_year = []
+    for t in timeline_one_year:
+        cpi_predicted_data_one_year.append(calculate_predicted_y(t, b_0_of_cpi_one_year, b_1_of_cpi_one_year))
+    x_data_regression_line_of_cpi_one_year = timeline_one_year
+    y_data_regression_line_of_cpi_one_year = cpi_predicted_data_one_year
+    plt.figure(1)
+    if(i == 0):
+        plt.plot(x_data_regression_line_of_cpi_one_year, y_data_regression_line_of_cpi_one_year, color = "brown", label = "regression line for CPI for each year")
+        plt.legend(loc = "upper left")
+    else:
+        plt.plot(x_data_regression_line_of_cpi_one_year, y_data_regression_line_of_cpi_one_year, color = "brown")
+    plt.show(block = False)
+    correlation_coefficient_cpi = calculate_correlation_coefficient(original_matrix[i], cpi_predicted_data_one_year)
+    print("                correlation coefficient between cpi and the predicted cpi:", correlation_coefficient_cpi)
+    print()
 
 #--------------------------------------------------------------------------
 
