@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from math import sin, cos, tan, exp, pi
+from math import sin, pi
 
 #----------------------------------------------------------------------------------
 
